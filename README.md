@@ -1,33 +1,43 @@
-# Toolpad Core - Vite with React Router and mock authentication
+# React Supabase Auth Boiler Plate
 
-This example provides a minimal setup to get Toolpad Core working in Vite with HMR, as well as routing with React Router and a mock authentication setup.
+This is a boiler plate project for a React app using Supabase Auth for user authentication
 
-## Clone using `create-toolpad-app`
+## Usage
 
-To copy this example and customize it for your needs, run
+### 1. - Clone this repository 
 
 ```bash
-npx create-toolpad-app@latest --example auth-vite
-# or
-pnpm create toolpad-app --example auth-vite
+gh repo clone tome-ferreira/ReactSupabaseAuthBoilerPlate
 ```
 
-## Getting Started
+### 2. - Install project dependencies 
+
+Install the project dependencies using 
+
+```bash
+npm install
+```
+
+### 3. - Set up a Supabase project
+
+Create a Supabase project on their [official web site](https://supabase.com/). Make sure to configure and activate Google 0Auth for this project 
+
+### 4. - Set up enviromental variables 
+
+In the sorce of the project create a `.env file` and add the following code:
+
+```
+VITE_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
+VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_PROJECT_ANON_KEY
+```
+
+### 5. - Run the project
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
 
-## The source
-
-[Check out the source code](https://github.com/mui/toolpad/tree/master/examples/core/auth-vite/)
