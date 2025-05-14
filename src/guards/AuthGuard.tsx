@@ -15,7 +15,7 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   
 
   useEffect(() => {
-    if (loading) return; // Wait for loading to finish
+    if (loading) return; 
 
     const returnUrl = encodeURIComponent(location.pathname + location.search);
     if (!user) {

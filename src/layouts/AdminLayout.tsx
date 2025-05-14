@@ -1,18 +1,9 @@
 import { Outlet, Navigate, useLocation } from 'react-router';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import { useSession } from '../contexts/SessionContext';
 
-export default function Layout() {
-  const { session } = useSession();
+export default function AdminLayout() {
   const location = useLocation();
-
-  if (!session) {
-    // Add the `callbackUrl` search parameter
-    const redirectTo = `/sign-in?callbackUrl=${encodeURIComponent(location.pathname)}`;
-
-    return <Navigate to={redirectTo} replace />;
-  }
 
   return (
     <DashboardLayout>

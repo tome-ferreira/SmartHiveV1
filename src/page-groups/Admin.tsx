@@ -1,16 +1,16 @@
 import { Outlet, useNavigate } from 'react-router';
 import { AuthProvider } from '../contexts/AuthContext';
 import AuthGuard from '../guards/AuthGuard';
-import ClientGuard from '../guards/ClientGuard';
+import AdminGuard from '../guards/AdminGuard';
 
 
-export default function ClientGroup() {
+export default function AdminGroup() {
   return (
     <AuthProvider>
         <AuthGuard>
-            <ClientGuard>
-              <Outlet />   
-            </ClientGuard>
+            <AdminGuard>
+                <Outlet />  
+            </AdminGuard> 
         </AuthGuard>  
     </AuthProvider>
   );
