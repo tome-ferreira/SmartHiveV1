@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
-import XiscardOutlineBtn from "../../../components/utils/btns/XiscardOutlineBtn";
+import SmartHiveOutlineBtn from "../../../components/utils/btns/SmartHiveOutlineBtn";
 
 const VerifyEmailPage = () => {
   const { user, refreshUser } = useAuth();
@@ -31,12 +31,12 @@ const VerifyEmailPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center xiscard-grad-bg p-10">
+    <div className="min-h-screen flex items-center justify-center smarthive-grad-bg p-10">
       <div className="flex flex-col items-center space-y-3 w-full max-w-md">
-        <div className="bg-[#011134] p-8 rounded-lg shadow-lg w-full text-center">
-          <img src="/img/logos/xiscard-big-logo-no-shadow.png" alt="Xiscard Logo" />
+        <div className="bg-eucalyptus-950 p-8 rounded-lg shadow-lg w-full text-center">
+          <img src="/img/logos/SmartHiveLogoHor.png" alt="SmartHive Logo" />
         </div>
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full text-center">
+        <div className="bg-[#f0f9f4] p-8 rounded-lg shadow-lg w-full text-center">
           <h2 className="text-xl font-semibold mb-4">Verify your email</h2>
           <p className="mb-4">
             We’ve sent a verification email to{" "}
@@ -48,7 +48,7 @@ const VerifyEmailPage = () => {
             This page will automatically continue once your email is verified.
           </p>
           {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-          <XiscardOutlineBtn
+          <SmartHiveOutlineBtn
             text={checking ? "Checking..." : "I’ve Verified My Email"}
             className="px-4 py-2 mx-auto"
             onClick={handleManualCheck}

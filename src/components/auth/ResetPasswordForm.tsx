@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { FaAt } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
-import XiscardPrimaryBtn from "../utils/btns/XiscardPrimaryBtn";
-import XiscardPasswordInput from "../utils/forms/XiscardPasswordInput";
 import { useNavigate } from "react-router-dom";
+import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 
 const ResetPasswordForm = () => {
   const { resetPassword } = useAuth();
@@ -46,7 +45,7 @@ const ResetPasswordForm = () => {
 
       <button onClick={handleGoBack} className="mt-4 text-blue-600 hover:underline">Go back</button>
 
-      <XiscardPrimaryBtn
+      <SmartHivePrimaryBtn
         text="Send Email"
         className="w-full mt-2"
         onClick={handleReset}

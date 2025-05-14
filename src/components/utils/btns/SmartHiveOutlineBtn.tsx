@@ -1,6 +1,6 @@
 import React from 'react';
 
-type XiscardOutlineBtnProps = {
+type SmartHiveOutlineBtnProps = {
   text: string;
   icon?: React.ReactNode;
   onClick?: () => void;
@@ -9,7 +9,7 @@ type XiscardOutlineBtnProps = {
   disabled?: boolean;
 };
 
-const XiscardOutlineBtn: React.FC<XiscardOutlineBtnProps> = ({
+const SmartHiveOutlineBtn: React.FC<SmartHiveOutlineBtnProps> = ({
   text,
   icon,
   onClick,
@@ -24,10 +24,10 @@ const XiscardOutlineBtn: React.FC<XiscardOutlineBtnProps> = ({
       disabled={disabled}
       className={`
         flex items-center justify-center gap-2
-        bg-white text-[#16274a] border border-[#16274a]
+        bg-white text-[#36916a] border border-[#36916a]
         px-4 py-2 rounded-full
         transition duration-200 ease-in-out
-        hover:text-white hover:bg-[#266fd1] hover:border-[#266fd1]
+        hover:text-white hover:bg-[#355c4c] hover:border-[#355c4c]
         hover:scale-[1.03] shadow-md hover:shadow-lg
         disabled:opacity-50 disabled:cursor-not-allowed
         ${className}
@@ -39,4 +39,4 @@ const XiscardOutlineBtn: React.FC<XiscardOutlineBtnProps> = ({
   );
 };
 
-export default XiscardOutlineBtn;
+export default SmartHiveOutlineBtn;

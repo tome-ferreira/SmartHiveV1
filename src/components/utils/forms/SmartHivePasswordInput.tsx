@@ -9,7 +9,7 @@ type PasswordInputProps = {
   className?: string;
 };
 
-const XiscardPasswordInput: React.FC<PasswordInputProps> = ({
+const SmartHivePasswordInput: React.FC<PasswordInputProps> = ({
   value,
   onChange,
   placeholder = 'Password',
@@ -40,4 +40,4 @@ const XiscardPasswordInput: React.FC<PasswordInputProps> = ({
   );
 };
 
-export default XiscardPasswordInput;
+export default SmartHivePasswordInput;

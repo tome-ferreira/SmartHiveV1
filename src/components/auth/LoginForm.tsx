@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaAt } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
-import XiscardPrimaryBtn from "../utils/btns/XiscardPrimaryBtn";
-import XiscardPasswordInput from "../utils/forms/XiscardPasswordInput";
 import { useNavigate } from "react-router-dom";
+import SmartHivePasswordInput from "../utils/forms/SmartHivePasswordInput";
+import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 
 const LoginForm = ({ returnUrl }: { returnUrl: string }) => {
   const { signInWithCredentials } = useAuth();
@@ -48,7 +48,7 @@ const LoginForm = ({ returnUrl }: { returnUrl: string }) => {
       
         {/* Password input */}
         <div className="relative w-full mb-4">
-          <XiscardPasswordInput
+          <SmartHivePasswordInput
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mb-4"
@@ -57,14 +57,14 @@ const LoginForm = ({ returnUrl }: { returnUrl: string }) => {
 
         
 
-        <XiscardPrimaryBtn
+        <SmartHivePrimaryBtn
           text="LOG-IN"
           className="w-full mt-2"
           type="submit"
         />
       </form>
 
-      <button onClick={handleForgotPassword} className="mt-4 text-blue-600 hover:underline">I forgot my password</button>
+      <button onClick={handleForgotPassword} className="mt-4 text-eucalyptus-500 hover:underline">I forgot my password</button>
     </div>
   );
 };

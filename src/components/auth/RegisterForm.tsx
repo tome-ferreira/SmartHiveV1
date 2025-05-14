@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
-import XiscardPrimaryBtn from '../utils/btns/XiscardPrimaryBtn';
-import XiscardPasswordInput from '../utils/forms/XiscardPasswordInput';
+import XiscardPrimaryBtn from '../utils/btns/SmartHivePrimaryBtn';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router';
+import SmartHivePasswordInput from '../utils/forms/SmartHivePasswordInput';
 
 const RegisterForm = ({ returnUrl }: { returnUrl: string }) => {
   const { signUpWithCredentials } = useAuth();
@@ -86,7 +86,7 @@ const RegisterForm = ({ returnUrl }: { returnUrl: string }) => {
 
       {/* Password */}
       <div className="relative">
-        <XiscardPasswordInput
+        <SmartHivePasswordInput
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mb-4"
@@ -96,7 +96,7 @@ const RegisterForm = ({ returnUrl }: { returnUrl: string }) => {
 
       {/* Confirm Password */}
       <div className="relative">
-        <XiscardPasswordInput
+        <SmartHivePasswordInput
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           className="mb-4"

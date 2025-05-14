@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaAt } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
-import XiscardPrimaryBtn from "../utils/btns/XiscardPrimaryBtn";
-import XiscardPasswordInput from "../utils/forms/XiscardPasswordInput";
 import { useNavigate } from "react-router-dom";
+import SmartHivePasswordInput from "../utils/forms/SmartHivePasswordInput";
+import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 
 const UpdatePasswordForm = () => {
   const { updatePassword } = useAuth();
@@ -40,7 +40,7 @@ const UpdatePasswordForm = () => {
 
       {/* Password */}
       <div className="relative">
-        <XiscardPasswordInput
+        <SmartHivePasswordInput
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mb-4"
@@ -50,7 +50,7 @@ const UpdatePasswordForm = () => {
 
       {/* Confirm Password */}
       <div className="relative">
-        <XiscardPasswordInput
+        <SmartHivePasswordInput
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           className="mb-4"
@@ -58,7 +58,7 @@ const UpdatePasswordForm = () => {
         /> 
       </div>
 
-      <XiscardPrimaryBtn
+      <SmartHivePrimaryBtn
         text="Reset Password"
         className="w-full mt-2"
         onClick={handleSubmit}

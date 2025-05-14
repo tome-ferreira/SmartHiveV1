@@ -1,6 +1,6 @@
 import React from 'react';
 
-type XiscardPrimaryBtnProps = {
+type SmartHivePrimaryBtnProps = {
   text: string;
   icon?: React.ReactNode;
   onClick?: () => void;
@@ -9,7 +9,7 @@ type XiscardPrimaryBtnProps = {
   disabled?: boolean;
 };
 
-const XiscardPrimaryBtn: React.FC<XiscardPrimaryBtnProps> = ({
+const SmartHivePrimaryBtn: React.FC<SmartHivePrimaryBtnProps> = ({
   text,
   icon,
   onClick,
@@ -24,8 +24,8 @@ const XiscardPrimaryBtn: React.FC<XiscardPrimaryBtnProps> = ({
       disabled={disabled}
       className={`
         flex items-center justify-center gap-2
-        bg-[#16274a] text-white px-4 py-2 rounded-full
-        hover:bg-[#266fd1] transition duration-200 ease-in-out
+        bg-[#36916a] text-white px-4 py-2 rounded-full
+        hover:bg-[#355c4c]  transition duration-200 ease-in-out
         hover:scale-[1.03] shadow-md hover:shadow-lg
         ${className}
       `}
@@ -36,4 +36,4 @@ const XiscardPrimaryBtn: React.FC<XiscardPrimaryBtnProps> = ({
   );
 };
 
-export default XiscardPrimaryBtn;
+export default SmartHivePrimaryBtn;

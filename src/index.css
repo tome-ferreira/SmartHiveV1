@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
-/************************ XISCARD COSTUM STYLES ************************/
-.xiscard-grad-bg{
-  background: linear-gradient(135deg, #14203e, #304272);
+/************************ SMARTHIVE COSTUM STYLES ************************/
+@theme{
+  --color-eucalyptus-50: #f0f9f4;
+  --color-eucalyptus-100: #daf1e3;
+  --color-eucalyptus-200: #b8e2cb;
+  --color-eucalyptus-300: #8acbab;
+  --color-eucalyptus-400: #58af87;
+  --color-eucalyptus-500: #36916a;
+  --color-eucalyptus-600: #267554;
+  --color-eucalyptus-700: #1e5e46;
+  --color-eucalyptus-800: #1a4b38;
+  --color-eucalyptus-900: #163e2f;
+  --color-eucalyptus-950: #0c221b;
+}
+
+.smarthive-grad-bg{
+  background: linear-gradient(#36916a, #0c221b);
 }
 /***********************************************************************/
 
