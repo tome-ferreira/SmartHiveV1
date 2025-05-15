@@ -18,6 +18,9 @@ import AdminLayout from './layouts/AdminLayout';
 import AdminDashboard from './pages/AdminGroup/AdminDashboard';
 import ClientLayout from './layouts/ClientLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@emotion/react';
+import { createTheme } from '@mui/material';
+import ManageUsers from './pages/AdminGroup/ManageUsers';
 
 const queryClient = new QueryClient();
 
@@ -68,6 +71,10 @@ const router = createBrowserRouter([
             path: '/Admin/Dashboard',
             Component: AdminDashboard
           },
+          {
+            path: '/Admin/ManageUsers',
+            Component: ManageUsers
+          }
         ]
       },
     ]
@@ -89,10 +96,19 @@ const router = createBrowserRouter([
   }
 ]);
 
+const theme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data',
+  },
+});
+
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </React.StrictMode>
+  </ThemeProvider>,
 );
