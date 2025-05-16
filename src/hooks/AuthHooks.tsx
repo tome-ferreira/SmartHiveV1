@@ -68,31 +68,32 @@ type AddUserToRoleInput = {
 };
 
 const addUserToRoleMutation = async ({ userEmail, role }: AddUserToRoleInput) => {
-  const { data: roleData , error: roleError } = await supabase.from("Roles").select("id").eq("name", role).maybeSingle();
-  if (roleError) throw new Error(roleError.message);
 
-  const { data: userIdData, error: userIdError } = await supabase.rpc('get_user_id_by_email', { p_email: userEmail });
-  if (userIdError) throw new Error(userIdError.message);
+  const { data: roleData, error: roleError } = await supabase.from("Roles").select("id").eq("name", role).maybeSingle();
+  if (roleError) throw new Error(`Error fetching role: ${roleError.message}`);
+  if (!roleData?.id) throw new Error(`Role '${role}' not found`);
 
-  const { data: removeRoleData , error: removeRoleError } = await supabase.from("UserRoles").delete().eq("userId", userIdData);
-  if (removeRoleData) throw new Error(removeRoleError?.message);
+  const { data: userIdData, error: userIdError } = await supabase.rpc('get_user_id_by_email', { p_email: userEmail, });
+  if (userIdError) throw new Error(`Error fetching user ID: ${userIdError.message}`);
+  if (!userIdData) throw new Error(`User '${userEmail}' not found`);
 
-  const ur: userRole = {
-    userId: userIdData,
-    roleId: roleData?.id,
-  };
+  const { data: updateData, error: updateError } = await supabase.from("UserRoles").update({ roleId: roleData.id }).eq("userId", userIdData).select(); 
+  if (updateError) throw new Error(`Error updating user role: ${updateError.message}`);
 
-  const { error, data } = await supabase.from("UserRoles").insert(ur);
-  if (error) throw new Error(error.message);
-  
-  return data;
+  if (updateData.length === 0) {
+    const { data: insertData, error: insertError } = await supabase.from("UserRoles").insert({ userId: userIdData, roleId: roleData.id,});
+    if (insertError) throw new Error(`Error inserting new user role: ${insertError.message}`);
+    return insertData;
+  }
+
+  return updateData;
 };
 
-export const useAddUserToRoleMutation = () =>{
+export const useAddUserToRoleMutation = () => {
   return useMutation({
     mutationFn: addUserToRoleMutation,
   });
-}
+};
 //*******************************************************************************
 
 // useGetAllUsersHook ***********************************************************

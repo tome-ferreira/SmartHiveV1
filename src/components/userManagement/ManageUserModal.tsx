@@ -35,23 +35,20 @@ const ManageUserModal = ({ open, onClose, userData }: ManageUserModalProps) => {
   }, [role, originalRole]);
 
   const handleSaveChanges = async () => {
-    try {
-      await addUserToRole({
-        userEmail: userData.email,
-        role,
-      });
+  try {
+    await addUserToRole({
+      userEmail: userData.email,
+      role,
+    });
 
-      setOriginalRole(role);
-      setIsChanged(false);
-
-      queryClient.invalidateQueries({ queryKey: ["getAllUsers"] });
-
-      onClose;
-    } catch (err) {
-      console.error("Failed to update role:", err);
-      // Optional: show error toast
-    }
-  };
+    setOriginalRole(role);
+    setIsChanged(false);
+    queryClient.invalidateQueries({ queryKey: ["getAllUsers"] });
+    onClose(); 
+  } catch (err) {
+    console.error("Failed to update role:", err);
+  }
+};
 
   if (!userData) return null;
 

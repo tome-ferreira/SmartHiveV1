@@ -6,12 +6,15 @@ import SmartHiveOutlineBtn from "../../components/utils/btns/SmartHiveOutlineBtn
 import SmartHiveOutlineBtnXS from "../../components/utils/btns/SmartHiveOutlineBtnXS";
 import { useState } from "react";
 import ManageUserModal from "../../components/userManagement/ManageUserModal";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ManageUsers = () => {
     const { data, error, isLoading } = useGetAllUsersHook();
 
     const [openModal, setOpenModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState<any | null>(null);
+
+    const { user } = useAuth();
 
     const handleManageClick = (user: any) => {
         setSelectedUser(user);
@@ -81,6 +84,8 @@ const ManageUsers = () => {
             flex: 1,
             minWidth: 100,
             renderCell: (params) =>{
+                if (params.row.email === user?.email) return null;
+
                 return(
                     <SmartHiveOutlineBtnXS
                         label="Manage"
