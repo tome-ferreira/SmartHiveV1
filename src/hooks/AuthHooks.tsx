@@ -112,3 +112,23 @@ export const useGetAllUsersHook = () => {
   });
 };
 //*******************************************************************************
+
+// getUserRoleById **************************************************************
+const getUserRoleById = async (userId: string): Promise<string> => {
+  const { data, error } = await supabase.rpc('get_user_role_name', {
+    user_uuid: userId, // nome do parâmetro deve bater com o da função SQL
+  });
+
+  if (error) throw new Error(error.message);
+
+  return data as string;
+};
+
+export const useGetUserRoleHook = (userId: string) => {
+  return useQuery<string, Error>({
+    queryKey: ['getUserRole', userId],
+    queryFn: () => getUserRoleById(userId),
+    enabled: !!userId, // só faz a query se o userId existir
+  });
+};
+// ******************************************************************************

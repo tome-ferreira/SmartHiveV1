@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useIsClientHook } from '../hooks/AuthHooks';
+import SmartHiveLoadingSplash from '../components/utils/loading/SmartHiveLoadingSplash';
 
 interface ClientGuardProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ const ClientGuard = ({ children }: ClientGuardProps) => {
     const { data: isClient, isLoading } = useIsClientHook();
 
     if (isLoading) {
-      return <div>Loading...</div>; 
+      return <SmartHiveLoadingSplash/>; 
     }
 
     if (!isClient) {

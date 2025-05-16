@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useIsAdminHook } from '../hooks/AuthHooks';
+import SmartHiveLoadingSplash from '../components/utils/loading/SmartHiveLoadingSplash';
 
 interface AdminGuardProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ const AdminGuard = ({ children }: AdminGuardProps) => {
     const { data: isAdmin, isLoading } = useIsAdminHook();
 
     if (isLoading) {
-      return <div>Loading...</div>; 
+      return <SmartHiveLoadingSplash/>; 
     }
 
     if (!isAdmin) {

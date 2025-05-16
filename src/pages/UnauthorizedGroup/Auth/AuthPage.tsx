@@ -12,7 +12,7 @@ const AuthPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const returnUrl = searchParams.get("returnUrl") || "/UserDashboard";
+  const returnUrl = searchParams.get("returnUrl") || "/redirect";
 
   if(user){
     navigate(returnUrl);
