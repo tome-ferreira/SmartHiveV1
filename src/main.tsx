@@ -22,6 +22,7 @@ import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import ManageUsers from './pages/AdminGroup/ManageUsers';
 import { RedirectPage } from './pages/AuthorizedGroup/RedirectPage';
+import CostumerRecordsPage from './pages/AdminGroup/CostumerRecords';
 
 const queryClient = new QueryClient();
 
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
           {
             path: '/Admin/ManageUsers',
             Component: ManageUsers
+          },
+          {
+            path: '/Admin/CostumerRecords',
+            Component: CostumerRecordsPage
           }
         ]
       },

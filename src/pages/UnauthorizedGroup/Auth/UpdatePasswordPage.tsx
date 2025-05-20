@@ -2,7 +2,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import UpdatePasswordForm from "../../../components/auth/UpdatePasswordForm";
 import { useEffect } from "react";
-import { supabase } from "../../../supabase-client";
+import { supabase } from "../../../services/supabase-client";
 
 const UpdatePasswordPage = () => {
   const {  user } = useAuth();

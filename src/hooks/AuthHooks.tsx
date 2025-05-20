@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { supabase } from "../supabase-client";
+import { supabase } from "../services/supabase-client";
 import { User } from "../models/user";
 import { userRole } from "../models/userRole";
 
@@ -128,7 +128,7 @@ export const useGetUserRoleHook = (userId: string) => {
   return useQuery<string, Error>({
     queryKey: ['getUserRole', userId],
     queryFn: () => getUserRoleById(userId),
-    enabled: !!userId, // só faz a query se o userId existir
+    enabled: !!userId, 
   });
 };
 // ******************************************************************************
