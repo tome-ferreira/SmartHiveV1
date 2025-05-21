@@ -1,28 +1,37 @@
-import { Autocomplete, Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { CostumerRecord } from "../../models/costumerRecord";
 import { useForm, Controller } from "react-hook-form";
 import countries from "../../data/countries";
 import { useState } from "react";
 import { AddFromUserModal } from "./AddFromUserModal";
-import SmartHiveOutlineBtn from "../utils/btns/SmartHiveOutlineBtn";
 import { UserSimple } from "../../models/userSimple";
+import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
+import { usePostCostumerRecordHook } from "../../hooks/CostumerRecordsHooks";
+import { useNavigate } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
+
+/*ICONS*/
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+/*******/
+interface CreateRecordFormProps {
+    onSuccess: () => void;
+}
 
 
-export const CreateRecordForm = () => {
+export const CreateRecordForm = ({ onSuccess }: CreateRecordFormProps) => {
     const { register, handleSubmit, control, setValue, formState: { errors }, } = useForm<Omit<CostumerRecord, "id" | "created_at">>();
     const [openModal, setOpenModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState<UserSimple | null>(null);
-
-    const handleOpenModalClick = () => {
-        setOpenModal(true);
-    }
+    const { mutateAsync: addUserToRole } = usePostCostumerRecordHook();
+    
 
     const handleCloseModal = () => {
         setOpenModal(false);
     };
 
     const onSubmit = (data: Omit<CostumerRecord, "id" | "created_at">) => {
-        console.log("Submitted:", data);
+        addUserToRole(data);
+        onSuccess();
     };
 
     return (
@@ -34,31 +43,59 @@ export const CreateRecordForm = () => {
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Grid container spacing={3}>
                     {/* Name */}
-                    <Grid item xs={12} md={7}>
+                    <Grid item xs={12} md={5}>
                         <TextField
-                        label="Name"
-                        fullWidth
-                        {...register("Name", { required: "Name is required" })}
-                        error={!!errors.Name}
-                        helperText={errors.Name?.message}
+                            label="Name"
+                            fullWidth
+                            disabled={!!selectedUser}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                            endAdornment: selectedUser ? <LockOutlinedIcon color="disabled" /> : null,
+                            style: selectedUser ? { backgroundColor: "#f5f5f5" } : {},
+                            }}
+                            {...register("Name", { required: "Name is required" })}
+                            error={!!errors.Name}
+                            helperText={errors.Name?.message}
                         />
                     </Grid>
 
                     {/* Email */}
                     <Grid item xs={12} md={5}>
                         <TextField
-                        label="Email"
-                        type="email"
-                        fullWidth
-                        {...register("Email", {
+                            label="Email"
+                            type="email"
+                            fullWidth
+                            disabled={!!selectedUser}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                            endAdornment: selectedUser ? <LockOutlinedIcon color="disabled" /> : null,
+                            style: selectedUser ? { backgroundColor: "#f5f5f5" } : {},
+                            }}
+                            {...register("Email", {
                             required: "Email is required",
                             pattern: {
-                            value: /^\S+@\S+$/i,
-                            message: "Invalid email format",
+                                value: /^\S+@\S+$/i,
+                                message: "Invalid email format",
                             },
-                        })}
-                        error={!!errors.Email}
-                        helperText={errors.Email?.message}
+                            })}
+                            error={!!errors.Email}
+                            helperText={errors.Email?.message}
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={2} sx={{ display: 'flex', alignItems: 'stretch' }}>
+                        <SmartHivePrimaryBtn
+                            className="w-100"
+                            text={selectedUser ? "Clear user selection" : "Add from user"}
+                            onClick={() => {
+                                if (selectedUser) {
+                                    setSelectedUser(null);
+                                    setValue("Name", "");
+                                    setValue("Email", "");
+                                    setValue("UserId", undefined);
+                                } else {
+                                    setOpenModal(true);
+                                }
+                            }} 
                         />
                     </Grid>
 
@@ -114,9 +151,9 @@ export const CreateRecordForm = () => {
 
                     {/* Submit Button */}
                     <Grid item xs={12}>
-                        <Button type="submit" variant="contained" size="large">
-                            Submit
-                        </Button>
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <SmartHivePrimaryBtn type="submit" text="Create record" />
+                        </Box>
                     </Grid>
                 </Grid>
 
@@ -137,24 +174,7 @@ export const CreateRecordForm = () => {
                     setValue("UserId", user.user_id);
                     setOpenModal(false);
                 }}
-            />  
-
-            <SmartHiveOutlineBtn
-                text={selectedUser ? "Clear user selection" : "Add from user"}
-                onClick={() => {
-                    if (selectedUser) {
-                    // Clear selection
-                    setSelectedUser(null);
-                    setValue("Name", "");
-                    setValue("Email", "");
-                    setValue("UserId", undefined);
-                    } else {
-                        setOpenModal(true);
-                    }
-                }}
-            />                
-
+            />                 
         </Container>
     );
 };
-

@@ -8,10 +8,13 @@ const CostumerRecordsPage = () => {
 
     return (
         <div>
-            <SmartHivePrimaryBtn text={isCreate ? "Go back" : "Add record"} onClick={() => setIsCreate(!isCreate)} />
+            <SmartHivePrimaryBtn
+                text={isCreate ? "Go back" : "Add record"}
+                onClick={() => setIsCreate(!isCreate)}
+            />
 
             {isCreate ? (
-                <CreateRecordForm />
+                <CreateRecordForm onSuccess={() => setIsCreate(false)} />
             ) : (
                 <RecordList />
             )}
