@@ -7,8 +7,6 @@ import { AddFromUserModal } from "./AddFromUserModal";
 import { UserSimple } from "../../models/userSimple";
 import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 import { usePostCostumerRecordHook } from "../../hooks/CostumerRecordsHooks";
-import { useNavigate } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
 
 /*ICONS*/
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -30,6 +28,9 @@ export const CreateRecordForm = ({ onSuccess }: CreateRecordFormProps) => {
     };
 
     const onSubmit = (data: Omit<CostumerRecord, "id" | "created_at">) => {
+        if(data.UserId === ""){
+            data.UserId = null
+        }
         addUserToRole(data);
         onSuccess();
     };

@@ -19,8 +19,8 @@ export const AddFromUserModal = ({ open, onClose, onUserSelected }: AddFromUserM
 
     useEffect(() => {
         if (open) {
-            refetch(); // Refetch users when modal opens
-            setSearchTerm(""); // Reset search
+            refetch(); 
+            setSearchTerm(""); 
         }
     }, [open]);
 
@@ -39,7 +39,6 @@ export const AddFromUserModal = ({ open, onClose, onUserSelected }: AddFromUserM
                         <div className="flex-1 overflow-y-auto">
                             <h1 className="text-lg font-semibold mb-3">Select a user</h1>
                             
-                            {/* 🔍 Search Input */}
                             <input
                                 type="text"
                                 placeholder="Search users..."
@@ -48,7 +47,6 @@ export const AddFromUserModal = ({ open, onClose, onUserSelected }: AddFromUserM
                                 className="w-full p-2 mb-4 border rounded-md bg-transparent focus:outline-none focus:ring-2 focus:ring-primary"
                             />
 
-                            {/* 🔄 Loading / Error / List */}
                             {isLoading && <SmartHiveLoading />}
                             {error && <p className="text-red-500">Error loading users</p>}
 
@@ -76,7 +74,7 @@ export const AddFromUserModal = ({ open, onClose, onUserSelected }: AddFromUserM
                             )}
                         </div>
 
-                        {/* Footer Buttons */}
+                        {/* Buttons */}
                         <div className="mt-6 flex justify-end gap-2">
                             <SmartHivePrimaryBtnXS label="Cancel" onClick={onClose} />
                             {selected && (

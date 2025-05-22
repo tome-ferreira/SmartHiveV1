@@ -1,6 +1,6 @@
 export interface CostumerRecord {
   id?: number;
-  UserId?: string; 
+  UserId?: string | null; 
   Name: string;
   Email: string;
   Country: string;
