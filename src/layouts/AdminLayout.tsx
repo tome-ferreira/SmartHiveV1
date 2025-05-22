@@ -9,6 +9,7 @@ import { Navigation } from '@toolpad/core';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { BsFileEarmarkPersonFill } from "react-icons/bs";
+import { SiHomeassistant } from "react-icons/si";
 /*******/
 
 const NAVIGATION: Navigation = [
@@ -19,7 +20,16 @@ const NAVIGATION: Navigation = [
   },
   {
     kind: 'header',
-    title: 'User management',
+    title: 'Systems management'
+  },
+  {
+    segment: 'Admin/Systems',
+    title: 'Manage systems',
+    icon: <SiHomeassistant />,
+  },
+  {
+    kind: 'header',
+    title: 'Users management',
   },
   {
     segment: 'Admin/ManageUsers',
