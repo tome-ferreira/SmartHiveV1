@@ -5,16 +5,18 @@ import { Box } from "@mui/material";
 export const SystemsList = () => {
     const { data, error, isLoading } = useGetAllSystemsHook();
 
+    console.log("Systems", data)
+
     const columns: GridColDef<(typeof rows)[number]>[] = [
         {
-            field: 'costumer',
-            headerName: 'Costumer',
+            field: 'system',
+            headerName: 'System',
             flex: 1,
             minWidth: 100
         },
         {
-            field: 'system',
-            headerName: 'System',
+            field: 'costumer',
+            headerName: 'Costumer',
             flex: 1,
             minWidth: 100
         },
@@ -34,8 +36,8 @@ export const SystemsList = () => {
 
     const rows = data?.map((system: any, index: number) => ({
         id: system.id ?? index,
-        costumer: system.ClientName,
-        system: system.Name,
+        system: system.name,
+        costumer: system.clientname,
     })) || [];
 
     return(

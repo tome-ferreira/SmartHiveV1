@@ -7,7 +7,7 @@ import { CostumerRecordSimple } from "../models/costumerRecordSimple";
 
 // useGetAllCostumerRecordsHook *************************************************
 const getAllCostumerRecords = async (): Promise<CostumerRecordSimple[]> => {
-    const {data, error} = await supabase.from("CostumerRecords").select("*id, Name");
+    const {data, error} = await supabase.from("CostumerRecords").select("*id, Name, Email");
 
     if(error) throw new Error(error.message);
     
@@ -18,6 +18,24 @@ export const useGetAllCostumerRecordsHook = () => {
     return useQuery<CostumerRecordSimple[], Error>({
         queryKey: ['getCostumerRecords'],
         queryFn: () => getAllCostumerRecords(),
+    });
+};
+//*******************************************************************************
+
+// useGetAllCostumerRecordsSimpleHook *******************************************
+const getAllCostumerRecordsSimple = async (): Promise<CostumerRecordSimple[]> => {
+    const {data, error} = await supabase.from("CostumerRecords").select("*id, Name, Email");
+
+    if(error) throw new Error(error.message);
+    
+    return data as CostumerRecordSimple[];
+};
+
+export const useGetAllCostumerRecordsSimpleHook = () => {
+    return useQuery<CostumerRecordSimple[], Error>({
+        queryKey: ['getCostumerRecords'],
+        queryFn: () => getAllCostumerRecordsSimple(),
+        enabled: false
     });
 };
 //*******************************************************************************

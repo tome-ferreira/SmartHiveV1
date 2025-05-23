@@ -41,6 +41,12 @@ export const RecordList = () => {
             minWidth: 100
         },
         {
+            field: 'email',
+            headerName: 'Email',
+            flex: 1,
+            minWidth: 100
+        },
+        {
             field: 'details',
             headerName: '',
             flex: 1,
@@ -74,6 +80,7 @@ export const RecordList = () => {
     const rows = data?.map((record: any, index: number) => ({
         id: record.id ?? index,
         name: record.Name,
+        email: record.Email
     })) || [];
 
     return(

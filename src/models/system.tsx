@@ -1,6 +1,6 @@
 export interface System{
     id?: number;
-    ClientId: string;
+    ClientId?: number;
     Name: string;
     Description? : string | null;
     RemoteAccessLink: string;

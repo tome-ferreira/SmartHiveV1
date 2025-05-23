@@ -20,7 +20,7 @@ export const CreateRecordForm = ({ onSuccess }: CreateRecordFormProps) => {
     const { register, handleSubmit, control, setValue, formState: { errors }, } = useForm<Omit<CostumerRecord, "id" | "created_at">>();
     const [openModal, setOpenModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState<UserSimple | null>(null);
-    const { mutateAsync: addUserToRole } = usePostCostumerRecordHook();
+    const { mutateAsync: createRecord } = usePostCostumerRecordHook();
     
 
     const handleCloseModal = () => {
@@ -31,7 +31,7 @@ export const CreateRecordForm = ({ onSuccess }: CreateRecordFormProps) => {
         if(data.UserId === ""){
             data.UserId = null
         }
-        addUserToRole(data);
+        createRecord(data);
         onSuccess();
     };
 

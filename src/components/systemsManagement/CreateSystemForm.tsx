@@ -1,9 +1,18 @@
-import { Autocomplete, Container, Grid, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Container, Grid, IconButton, TextField, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { System } from "../../models/system";
 import currencies from "../../data/currencies";
 import paymentMethods from "../../data/paymentMethods";
+import { CostumerRecordSimple } from "../../models/costumerRecordSimple";
+
+/*ICONS*/
+import { IoMdCloseCircle } from "react-icons/io";
+import { RiUserAddFill } from "react-icons/ri";
+import { AddFromCostumerModal } from "./selectCostumerModal";
+import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
+import { usePostSystemHook } from "../../hooks/SystemsHooks";
+/*******/
 
 interface CreateSystemFormProps{
     onSuccess: () => void;
@@ -12,6 +21,8 @@ interface CreateSystemFormProps{
 export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
     const { register, handleSubmit, control, setValue, formState: { errors }, } = useForm<Omit<System, "id" | "created_at">>();
     const [openModal, setOpenModal] = useState(false);
+    const [selectedCostumer, setSelectedCostumer] = useState<CostumerRecordSimple | null>(null);
+    const { mutateAsync: createSystem } = usePostSystemHook();
 
     const handleCloseModal = () => {
         setOpenModal(false);
@@ -20,6 +31,7 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
     const onSubmit = (data: Omit<System, "id" | "created_at">) => {
         console.log(data);
 
+        createSystem(data);
         onSuccess();
     }
 
@@ -34,18 +46,69 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                     {/* ClientId */}
                     <input
                         type="hidden"
-                        {...register("ClientId")}
-                        //value={selectedUser?.user_id || ""}
+                        {...register("ClientId", {required:"Please select a costumer"})}
+                        value={selectedCostumer?.id || undefined}
                     />
+                    {/* Costumer name display */}
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            label={"Costumer"}
+                            fullWidth
+                            disabled
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                                endAdornment: (
+                                    <Tooltip
+                                        title={
+                                            selectedCostumer
+                                                ? "Remove selected costumer"
+                                                : "Add a new costumer"
+                                        }
+                                    >
+                                        <IconButton
+                                            edge="end"
+                                            onClick={() => {
+                                                if (selectedCostumer) {
+                                                    setSelectedCostumer(null); 
+                                                    setValue("ClientId", undefined);
+                                                } else {
+                                                    setOpenModal(true);
+                                                }
+                                            }}
+                                        >
+                                            {selectedCostumer ? (
+                                                <IoMdCloseCircle color="red" />
+                                            ) : (
+                                                <RiUserAddFill />
+                                            )}
+                                        </IconButton>
+                                    </Tooltip>
+                                ),
+                            }}
+                            error={!!errors.ClientId}
+                            helperText={errors.ClientId?.message}
+                            value={
+                                selectedCostumer ? selectedCostumer.Name : "Select a costumer"
+                            }
+                        />
+                    </Grid>
 
                     {/* Name */}
-                    <Grid item xs={12} md={12}>
-                        <TextField
-                            label="Name"
-                            fullWidth
-                            {...register("Name", { required: "Name is required" })}
-                            error={!!errors.Name}
-                            helperText={errors.Name?.message}
+                    <Grid item xs={12} md={6}>
+                        <Controller
+                            name="Name"
+                            control={control}
+                            rules={{ required: "Name is required" }}
+                            render={({ field }) => (
+                                <TextField
+                                    label="Name"
+                                    fullWidth
+                                    {...field}
+                                    error={!!errors.Name}
+                                    helperText={errors.Name?.message}
+                                    InputLabelProps={{ shrink: true }}
+                                />
+                            )}
                         />
                     </Grid>
 
@@ -129,6 +192,7 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         {...register("Downpayment", { required: "Downpayment is required" })}
                         error={!!errors.Downpayment}
                         helperText={errors.Downpayment?.message}
+                        type="number"
                         />
                     </Grid>
 
@@ -140,6 +204,7 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         {...register("MonthlyPayment", { required: "Monthly payment is required" })}
                         error={!!errors.MonthlyPayment}
                         helperText={errors.MonthlyPayment?.message}
+                        type="number"
                         />
                     </Grid>
 
@@ -151,12 +216,30 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         {...register("YearlyPayment", { required: "Yearly payment is required" })}
                         error={!!errors.YearlyPayment}
                         helperText={errors.YearlyPayment?.message}
+                        type="number"
                         />
                     </Grid>
-
+                        
+                    {/* Submit Button */}
+                    <Grid item xs={12}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <SmartHivePrimaryBtn type="submit" text="Create system" />
+                        </Box>
+                    </Grid>
 
                 </Grid>
             </form>
+
+            <AddFromCostumerModal
+                open={openModal}
+                onClose={handleCloseModal}
+                onCostumerSelected={(costumer) => {
+                    setSelectedCostumer(costumer);
+                    setValue("ClientId", costumer.id ?? undefined); 
+                    setOpenModal(false);
+                    setValue("Name", costumer.Name + "'s system"); 
+                }}
+            />
         </Container>
     );
 }
