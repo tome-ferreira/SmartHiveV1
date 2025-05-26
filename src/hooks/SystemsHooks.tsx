@@ -3,8 +3,9 @@ import { SystemSimple } from "../models/systemSimple";
 import { supabase } from "../services/supabase-client";
 import { System } from "../models/system";
 import { useNotifications } from "@toolpad/core";
+import { SystemWithClientName } from "../models/systemWithClientName";
 
-// useGetAllSystemsHook **********************************************************
+// useGetAllSystemsHook *********************************************************
 const getAllSystems = async (): Promise<SystemSimple[]> => {
     const {data, error} = await supabase.rpc("get_simple_systems");
 
@@ -15,8 +16,26 @@ const getAllSystems = async (): Promise<SystemSimple[]> => {
 
 export const useGetAllSystemsHook = () => {
     return useQuery<SystemSimple[], Error>({
-        queryKey: ['getCostumerRecords'],
+        queryKey: ['getAllSystems'],
         queryFn: () => getAllSystems(),
+    });
+};
+//*******************************************************************************
+
+// useGetSystemHook *************************************************************
+const getSystem = async (id: string): Promise<SystemWithClientName> => {
+    const { data, error } = await supabase
+        .rpc('get_full_system_by_id', { sys_id: parseInt(id)}).single();
+
+    if (error) throw new Error(error.message);
+    return data as SystemWithClientName;
+};
+
+export const useGetSystemHook = (systemId: string | null) => {
+    return useQuery<SystemWithClientName, Error>({
+        queryKey: ['getSystem'],
+        queryFn: () => getSystem(systemId!),
+        enabled: !!systemId,
     });
 };
 //*******************************************************************************
@@ -42,7 +61,7 @@ export const usePostSystemHook = () => {
             autoHideDuration: 3000,
             });
 
-            queryClient.invalidateQueries({ queryKey: ["getCostumerRecords"] });
+            queryClient.invalidateQueries({ queryKey: ["getAllSystems"] });
         },
         onError: (error: Error) => {
             notifications.show(`Failed to create system: ${error.message}`, {
@@ -53,3 +72,90 @@ export const usePostSystemHook = () => {
     });
 }
 //*******************************************************************************
+
+// useUpdateCostumerRecordHook **************************************************
+var systemId: any = "";
+
+const updateSystem = async (system: SystemWithClientName) => {
+  const { data, error } = await supabase
+    .from("Systems")
+    .update({
+      ClientId: system.clientid,
+      Name: system.name,
+      Description: system.description,
+      RemoteAccessLink: system.remoteaccesslink,
+      Downpayment: system.downpayment,
+      MonthlyPayment: system.monthlypayment,
+      YearlyPayment: system.yearlypayment,
+      Currency: system.currency,
+      PaymentMethod: system.paymentmethod,
+    })
+    .eq("id", system.id);
+
+    systemId = system.id
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+export const useUpdateSystemHook = () => {
+  const notifications = useNotifications();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateSystem,
+    onSuccess: () => {
+      notifications.show("Customer record updated successfully!", {
+        severity: "success",
+        autoHideDuration: 3000,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['getSystem'] })
+      queryClient.invalidateQueries({ queryKey: ['getAllSystems'] });
+    },
+    onError: (error: Error) => {
+      notifications.show(`Failed to update customer record: ${error.message}`, {
+        severity: "error",
+        autoHideDuration: 5000,
+      });
+    },
+  });
+};
+// *****************************************************************************
+
+// useDeleteSystemHook *************************************************
+const deleteSystem = async (systemId: string) => {
+  const { error } = await supabase
+    .from("Systems")
+    .delete()
+    .eq("id", systemId);
+
+  if (error) throw new Error(error.message);
+
+  return systemId;
+};
+
+export const useDeleteSystemHook = () => {
+  const notifications = useNotifications();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteSystem,
+    onSuccess: () => {
+      notifications.show('System deleted successfully!', {
+        severity: 'success',
+        autoHideDuration: 3000,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["getAllSystems"] });
+    },
+    onError: (error: Error) => {
+      notifications.show(`Failed to delete system: ${error.message}`, {
+        severity: 'error',
+        autoHideDuration: 5000,
+      });
+    },
+  });
+};
+// ****************************************************************************

@@ -1,11 +1,37 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useGetAllSystemsHook } from "../../hooks/SystemsHooks";
 import { Box } from "@mui/material";
+import { useState } from "react";
+import { DetailsEditSystemModal } from "./DetailsEditSystemModal";
+import SmartHiveOutlineBtnXS from "../utils/btns/SmartHiveOutlineBtnXS";
+import { DeleteSystemModal } from "./DeleteSystemModal";
+import SmartHiveDangerBtnXS from "../utils/btns/SmartHiveDangerBtnXS";
 
 export const SystemsList = () => {
     const { data, error, isLoading } = useGetAllSystemsHook();
+    const [openDetailsModal, setOpenDetailsModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [selectedId, setSelectedId] = useState<any | null>(null);
 
-    console.log("Systems", data)
+    const handleDetailsClick = (id: string) => {
+        setOpenDetailsModal(true);
+        setSelectedId(id);
+    };
+
+    const handleCloseDetailsModal = () => {
+        setOpenDetailsModal(false);
+        setSelectedId(null);
+    };
+
+    const handleDeleteClick = (id: string) => {
+        setOpenDeleteModal(true);
+        setSelectedId(id);
+    }
+
+    const handleCloseDeleteModal = () => {
+        setOpenDeleteModal(false);
+        setSelectedId(null);
+    }
 
     const columns: GridColDef<(typeof rows)[number]>[] = [
         {
@@ -24,13 +50,29 @@ export const SystemsList = () => {
             field: 'details',
             headerName: '',
             flex: 1,
-            minWidth: 50
+            minWidth: 50,
+            renderCell: (params) =>{
+                return(
+                    <SmartHiveOutlineBtnXS
+                        label="Details"
+                        onClick={() => handleDetailsClick(params.row.id)}
+                    />
+                );
+            }
         },
         {
             field: 'delete',
             headerName: '',
             flex: 1,
-            minWidth: 50
+            minWidth: 50,
+            renderCell: (params) =>{
+                return(
+                    <SmartHiveDangerBtnXS 
+                        label="Delete"
+                        onClick={() => handleDeleteClick(params.row.id)}
+                    />
+                );
+            }
         }
     ];
 
@@ -60,6 +102,18 @@ export const SystemsList = () => {
                     }}
                 />      
             </Box>
+
+            <DetailsEditSystemModal 
+                open={openDetailsModal}
+                onClose={handleCloseDetailsModal}
+                systemId={selectedId}
+            />
+
+            <DeleteSystemModal
+                open={openDeleteModal}
+                onClose={handleCloseDeleteModal}
+                systemId={selectedId}
+            />
         </div>
     );
 }

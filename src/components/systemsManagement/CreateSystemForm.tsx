@@ -9,9 +9,9 @@ import { CostumerRecordSimple } from "../../models/costumerRecordSimple";
 /*ICONS*/
 import { IoMdCloseCircle } from "react-icons/io";
 import { RiUserAddFill } from "react-icons/ri";
-import { AddFromCostumerModal } from "./selectCostumerModal";
 import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 import { usePostSystemHook } from "../../hooks/SystemsHooks";
+import { AddFromCostumerModal } from "./SelectCostumerModal";
 /*******/
 
 interface CreateSystemFormProps{
