@@ -2,6 +2,7 @@ import { Container, Grid, TextField } from "@mui/material";
 import { useGetCostumerRecordHook } from "../../hooks/CostumerRecordsHooks";
 import { System } from "../../models/system";
 import { SystemWithClientName } from "../../models/systemWithClientName";
+import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 
 interface SystemDetailsProps {
     system: SystemWithClientName;

@@ -5,6 +5,7 @@ import SmartHiveLoading from "../utils/loading/SmartHiveLoading";
 import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 import { SystemDetails } from "./SystemDetails";
 import { EditSystemForm } from "./EditSystemForm";
+import { RemoteAccesIFrame } from "./RemoteAccessIFrame";
 
 interface DetailsEditSystemModalProps {
     open: boolean;
@@ -15,6 +16,7 @@ interface DetailsEditSystemModalProps {
 export const DetailsEditSystemModal = ({ open, onClose, systemId} : DetailsEditSystemModalProps) => {
     const {data: System, error, isLoading, refetch} = useGetSystemHook(systemId);
     const [isEdit, setIsEdit] = useState<boolean>(false);
+    const [isIFrameOpen, setIsIFrameOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if(open){
@@ -48,23 +50,68 @@ export const DetailsEditSystemModal = ({ open, onClose, systemId} : DetailsEditS
                 {System && (
                     <>
                         <Grid container spacing={3}>
-                            <Grid item xs={8} md={9}>
-                                <Typography variant="h4">System details</Typography>
-                            </Grid>
-                            <Grid item xs={4} md={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
-                                <SmartHivePrimaryBtn
-                                    className="w-100"
-                                    text={isEdit ? 'Go back' : 'Edit'}
-                                    onClick={() => setIsEdit(!isEdit)}
-                                />
-                            </Grid>
+                            {isIFrameOpen ? (
+                                <>
+                                    <Grid item xs={8} md={9}>
+                                        <Typography variant="h4">Remote access</Typography>
+                                    </Grid>
+                                    <Grid item xs={4} md={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
+                                        <SmartHivePrimaryBtn
+                                            className="w-100"
+                                            text="Go back"
+                                            onClick={() => setIsIFrameOpen(false)}
+                                        />
+                                    </Grid>
+                                </>
+                            ) : isEdit ? (
+                                <>
+                                    <Grid item xs={8} md={9}>
+                                        <Typography variant="h4">Edit system</Typography>
+                                    </Grid>
+                                    <Grid item xs={4} md={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
+                                        <SmartHivePrimaryBtn
+                                            className="w-100"
+                                            text="Go back"
+                                            onClick={() => setIsEdit(false)}
+                                        />
+                                    </Grid>
+                                </>
+                            ) : (
+                                <>
+                                    <Grid item xs={12} md={6}>
+                                        <Typography variant="h4">Edit system</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} md={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
+                                        <SmartHivePrimaryBtn
+                                            className="w-100"
+                                            text="Edit system"
+                                            onClick={() => {
+                                            setIsEdit(true);
+                                            setIsIFrameOpen(false);
+                                             }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6} md={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
+                                        <SmartHivePrimaryBtn
+                                            className="w-100"
+                                            text="Remote access"
+                                            onClick={() => {
+                                            setIsEdit(false);
+                                            setIsIFrameOpen(true);
+                                            }}
+                                        />
+                                    </Grid>
+                                </>
+                            )}
                         </Grid>
-
-                        {isEdit ? (
+                        {isIFrameOpen ? (
+                            <RemoteAccesIFrame system={System} />
+                        ) : isEdit ? (
                             <EditSystemForm system={System} onSuccess={() => setIsEdit(false)} />
                         ) : (
                             <SystemDetails system={System} />
                         )}
+
                     </>
                 )}
                 </Paper>
