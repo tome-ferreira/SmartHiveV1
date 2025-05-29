@@ -4,6 +4,7 @@ import { supabase } from "../services/supabase-client";
 import { System } from "../models/system";
 import { useNotifications } from "@toolpad/core";
 import { SystemWithClientName } from "../models/systemWithClientName";
+import { FullSystemFormData } from "../models/fullSystemFormData";
 
 // useGetAllSystemsHook *********************************************************
 const getAllSystems = async (): Promise<SystemSimple[]> => {
@@ -41,12 +42,56 @@ export const useGetSystemHook = (systemId: string | null) => {
 //*******************************************************************************
 
 // usePostSystemHook ************************************************************
-const postSystem = async (system: System) => {
-    const {data, error} = await supabase.from("Systems").insert(system);
+export const postSystem = async (data: FullSystemFormData) => {
+  const { ClientId, Name, Description, RemoteAccessLink } = data
 
-    if(error) throw new Error(error.message);
+  const { data: insertData, error } = await supabase
+    .from("Systems")
+    .insert({ ClientId, Name, Description, RemoteAccessLink })
+    .select()
+    .single()
 
-    return data;
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  const system_id = insertData.id
+
+  console.log(
+    JSON.stringify({
+      system_id: system_id,
+      name: Name,
+      description: Description,
+      downpayment: data.Downpayment,
+      monthly: data.MonthlyPayment,
+      yearly: data.YearlyPayment
+    })
+  );
+
+  // 🎯 Trigger Edge Function
+  const response = await fetch(`http://127.0.0.1:54321/functions/v1/create_stripe_product`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+    },
+    body: JSON.stringify({
+      system_id: system_id,
+      name: Name,
+      description: Description,
+      downpayment: data.Downpayment,
+      monthly: data.MonthlyPayment,
+      yearly: data.YearlyPayment
+    })
+  })
+
+  const result = await response.json()
+
+  if (!response.ok) {
+    throw new Error(result.error || "Failed to create Stripe product")
+  }
+
+  return insertData
 }
 
 export const usePostSystemHook = () => {

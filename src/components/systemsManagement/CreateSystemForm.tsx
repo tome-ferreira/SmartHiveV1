@@ -12,6 +12,7 @@ import { RiUserAddFill } from "react-icons/ri";
 import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 import { usePostSystemHook } from "../../hooks/SystemsHooks";
 import { AddFromCostumerModal } from "./SelectCostumerModal";
+import { FullSystemFormData } from "../../models/fullSystemFormData";
 /*******/
 
 interface CreateSystemFormProps{
@@ -19,7 +20,7 @@ interface CreateSystemFormProps{
 }
 
 export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
-    const { register, handleSubmit, control, setValue, formState: { errors }, } = useForm<Omit<System, "id" | "created_at">>();
+    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<FullSystemFormData>();
     const [openModal, setOpenModal] = useState(false);
     const [selectedCostumer, setSelectedCostumer] = useState<CostumerRecordSimple | null>(null);
     const { mutateAsync: createSystem } = usePostSystemHook();
@@ -28,12 +29,11 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
         setOpenModal(false);
     };
 
-    const onSubmit = (data: Omit<System, "id" | "created_at">) => {
-        console.log(data);
-
-        createSystem(data);
-        onSuccess();
-    }
+    const onSubmit = (data: FullSystemFormData) => {
+        createSystem(data).then(() => {
+            onSuccess();
+        });
+    };
 
     return (
         <Container sx={{mt: 4}}>
@@ -70,7 +70,7 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                                             onClick={() => {
                                                 if (selectedCostumer) {
                                                     setSelectedCostumer(null); 
-                                                    setValue("ClientId", undefined);
+                                                    setValue("ClientId", -1);
                                                 } else {
                                                     setOpenModal(true);
                                                 }
@@ -235,7 +235,7 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                 onClose={handleCloseModal}
                 onCostumerSelected={(costumer) => {
                     setSelectedCostumer(costumer);
-                    setValue("ClientId", costumer.id ?? undefined); 
+                    setValue("ClientId", costumer.id ?? -1); 
                     setOpenModal(false);
                     setValue("Name", costumer.Name + "'s system"); 
                 }}
