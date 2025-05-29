@@ -13,6 +13,7 @@ import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 import { usePostSystemHook } from "../../hooks/SystemsHooks";
 import { AddFromCostumerModal } from "./SelectCostumerModal";
 import { FullSystemFormData } from "../../models/fullSystemFormData";
+import currencySymbols from "../../data/currencySymbols";
 /*******/
 
 interface CreateSystemFormProps{
@@ -24,6 +25,12 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
     const [openModal, setOpenModal] = useState(false);
     const [selectedCostumer, setSelectedCostumer] = useState<CostumerRecordSimple | null>(null);
     const { mutateAsync: createSystem } = usePostSystemHook();
+    const [selectedCurrencySymbol, setSelectedCurrencySymbol] = useState<string>("");
+
+    const currencyOptions = currencies.map((code) => ({
+        code,
+        label: `${currencySymbols[code] || ""} - ${code} `
+    }));
 
     const handleCloseModal = () => {
         setOpenModal(false);
@@ -134,58 +141,8 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         />
                     </Grid>
 
-                    {/* Currency (Autocomplete Dropdown) */}
-                    <Grid item xs={12} md={6}>
-                        <Controller
-                            name="Currency"
-                            control={control}
-                            rules={{ required: "Currency is required" }}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    options={currencies}
-                                    onChange={(_, value) => field.onChange(value ?? "")}
-                                    value={field.value || ""}
-                                    renderInput={(params) => (
-                                        <TextField
-                                        {...params}
-                                        label="Currency"
-                                        fullWidth
-                                        error={!!errors.Currency}
-                                        helperText={errors.Currency?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                    </Grid>
-
-                    {/* Payment method (Autocomplete Dropdown) */}
-                    <Grid item xs={12} md={6}>
-                        <Controller
-                            name="PaymentMethod"
-                            control={control}
-                            rules={{ required: "Payment method is required" }}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    options={paymentMethods}
-                                    onChange={(_, value) => field.onChange(value ?? "")}
-                                    value={field.value || ""}
-                                    renderInput={(params) => (
-                                        <TextField
-                                        {...params}
-                                        label="Payment Method"
-                                        fullWidth
-                                        error={!!errors.PaymentMethod}
-                                        helperText={errors.PaymentMethod?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                    </Grid>
-
                     {/* Downpayment */}
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6}>
                         <TextField
                         label="Downpayment"
                         fullWidth
@@ -196,8 +153,66 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         />
                     </Grid>
 
+                    {/* Currency (Autocomplete Dropdown) */}
+                    <Grid item xs={12} md={6}>
+                    <Controller
+                        name="Currency"
+                        control={control}
+                        rules={{ required: "Currency is required" }}
+                        render={({ field }) => (
+                        <Autocomplete
+                            options={currencyOptions}
+                            getOptionLabel={(option) => option.label}
+                            isOptionEqualToValue={(option, value) => {
+                            if (typeof value === "string") {
+                                return option.code === value;
+                            }
+                                return option.code === value.code;
+                            }}
+                            onChange={(_, value) => {
+                                field.onChange(value?.code ?? "");
+                                setSelectedCurrencySymbol(currencySymbols[value?.code as keyof typeof currencySymbols] || "");
+                            }}
+                            value={currencyOptions.find(opt => opt.code === field.value) || null}
+                            renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Currency"
+                                fullWidth
+                                error={!!errors.Currency}
+                                helperText={errors.Currency?.message}
+                            />
+                            )}
+                        />
+                        )}
+                    />
+                    </Grid>
+
+                    {/* YearlyPayment */}
+                    <Grid item xs={10} md={5}>
+                        <TextField
+                        label="Yearly payment"
+                        fullWidth
+                        {...register("YearlyPayment", { required: "Yearly payment is required" })}
+                        error={!!errors.YearlyPayment}
+                        helperText={errors.YearlyPayment?.message}
+                        type="number"
+                        />
+                    </Grid>
+                    {/* Symbol */}
+                    <Grid item xs={2} md={1}>
+                        <TextField
+                            fullWidth
+                            value={selectedCurrencySymbol}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                        />
+                    </Grid>
+
                     {/* MonthlyPayment */}
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={10} md={5}>
                         <TextField
                         label="Monthly payment"
                         fullWidth
@@ -207,16 +222,15 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         type="number"
                         />
                     </Grid>
-
-                    {/* YearlyPayment */}
-                    <Grid item xs={12} md={4}>
+                    {/* Symbol */}
+                    <Grid item xs={2} md={1}>
                         <TextField
-                        label="Yearly payment"
-                        fullWidth
-                        {...register("YearlyPayment", { required: "Yearly payment is required" })}
-                        error={!!errors.YearlyPayment}
-                        helperText={errors.YearlyPayment?.message}
-                        type="number"
+                            fullWidth
+                            value={selectedCurrencySymbol}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            InputLabelProps={{ shrink: true }}
                         />
                     </Grid>
                         

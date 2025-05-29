@@ -4,7 +4,6 @@ export interface FullSystemFormData {
   Description?: string;
   RemoteAccessLink?: string;
   Currency: string;
-  PaymentMethod: string;
   Downpayment: number;
   MonthlyPayment: number;
   YearlyPayment: number;
