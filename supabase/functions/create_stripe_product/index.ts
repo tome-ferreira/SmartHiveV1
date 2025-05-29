@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     })
   }
 
-  const { system_id, name, description, downpayment, monthly, yearly } = payload
+  const { system_id, name, description, currency, downpayment, monthly, yearly } = payload
 
   try {
   // Create Stripe product
@@ -56,18 +56,18 @@ Deno.serve(async (req) => {
   const [down, month, year] = await Promise.all([
     stripe.prices.create({
       unit_amount: Number(downpayment) * 100,
-      currency: 'brl',
+      currency: currency.toLowerCase(),
       product: product.id,
     }),
     stripe.prices.create({
       unit_amount: Number(monthly) * 100,
-      currency: 'brl',
+      currency: currency.toLowerCase(),
       recurring: { interval: 'month' },
       product: product.id,
     }),
     stripe.prices.create({
       unit_amount: Number(yearly) * 100,
-      currency: 'brl',
+      currency: currency.toLowerCase(),
       recurring: { interval: 'year' },
       product: product.id,
     }),

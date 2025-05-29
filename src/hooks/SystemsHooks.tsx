@@ -79,6 +79,7 @@ export const postSystem = async (data: FullSystemFormData) => {
       system_id: system_id,
       name: Name,
       description: Description,
+      currency: data.Currency,
       downpayment: data.Downpayment,
       monthly: data.MonthlyPayment,
       yearly: data.YearlyPayment
