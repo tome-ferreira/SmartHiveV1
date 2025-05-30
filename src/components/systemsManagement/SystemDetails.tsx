@@ -1,107 +1,79 @@
 import { Container, Grid, TextField } from "@mui/material";
-import { useGetCostumerRecordHook } from "../../hooks/CostumerRecordsHooks";
-import { System } from "../../models/system";
-import { SystemWithClientName } from "../../models/systemWithClientName";
 import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
+import { FullSystemDetails } from "../../models/SystemDetails";
 
 interface SystemDetailsProps {
-    system: SystemWithClientName;
+    system: FullSystemDetails;
 }
 
-export const SystemDetails = ({system}: SystemDetailsProps) => {
-
-
-    return(
+export const SystemDetails = ({ system }: SystemDetailsProps) => {
+    return (
         <div className="mt-5">
             <Container>
                 <Grid container spacing={3}>
-                    {/* Costumer name display */}
+                    {/* Client Name */}
                     <Grid item xs={12} md={6}>
                         <TextField
-                            label={"Costumer"}
+                            label="Client"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.clientname
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.clientname}
                         />
                     </Grid>
 
                     {/* Name */}
                     <Grid item xs={12} md={6}>
                         <TextField
-                            label="Name"
+                            label="System Name"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.name
-                            }
-                        />                   
+                            InputProps={{ readOnly: true }}
+                            value={system?.name}
+                        />
                     </Grid>
 
                     {/* Description */}
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12}>
                         <TextField
                             label="Description"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.description
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.description}
                         />
                     </Grid>
 
-                    {/* Description */}
-                    <Grid item xs={12} md={12}>
+                    {/* Remote Access */}
+                    <Grid item xs={12}>
                         <TextField
                             label="Remote Access Link"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.remoteaccesslink
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.remoteaccesslink}
                         />
                     </Grid>
 
-                    {/* Currency (Autocomplete Dropdown) */}
+                    {/* Currency */}
                     <Grid item xs={12} md={6}>
                         <TextField
                             label="Currency"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.currency
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.currency || ""}
                         />
                     </Grid>
 
-                    {/* Payment method (Autocomplete Dropdown) */}
+                    {/* Is Active */}
                     <Grid item xs={12} md={6}>
                         <TextField
-                            label="Payment method"
+                            label="Active"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.paymentmethod
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.isactive ? "Yes" : "No"}
                         />
                     </Grid>
 
@@ -111,46 +83,34 @@ export const SystemDetails = ({system}: SystemDetailsProps) => {
                             label="Downpayment"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.downpayment
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.downpayment ?? ""}
                         />
                     </Grid>
 
-                    {/* MonthlyPayment */}
+                    {/* Monthly Payment */}
                     <Grid item xs={12} md={4}>
                         <TextField
-                            label="Monthly payment"
+                            label="Monthly Payment"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.monthlypayment
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.monthlypayment ?? ""}
                         />
                     </Grid>
 
-                    {/* YearlyPayment */}
+                    {/* Yearly Payment */}
                     <Grid item xs={12} md={4}>
                         <TextField
-                            label="Yearly payment"
+                            label="Yearly Payment"
                             fullWidth
                             InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                               readOnly: true,
-                            }}
-                            value={
-                                system?.yearlypayment
-                            }
+                            InputProps={{ readOnly: true }}
+                            value={system?.yearlypayment ?? ""}
                         />
                     </Grid>
                 </Grid>
             </Container>
         </div>
     );
-}
+};

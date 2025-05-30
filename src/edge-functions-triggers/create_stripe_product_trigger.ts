@@ -1,5 +1,5 @@
 export const createStripeProduct = async (system_id: number, name: string, description: string, currency: string, downpayment: number, monthly: number, yearly: number ) => {
-  const response = await fetch(`http://127.0.0.1:54321/functions/v1/create_stripe_product`, {
+  const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1/create_stripe_product`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

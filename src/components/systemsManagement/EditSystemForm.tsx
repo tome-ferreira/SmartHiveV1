@@ -21,9 +21,10 @@ import { System } from "../../models/system";
 import { CostumerRecordSimple } from "../../models/costumerRecordSimple";
 import { SystemWithClientName } from "../../models/systemWithClientName";
 import { useUpdateSystemHook } from "../../hooks/SystemsHooks";
+import { FullSystemDetails } from "../../models/SystemDetails";
 
 interface EditSystemFormProps {
-  system: SystemWithClientName;
+  system: FullSystemDetails;
   onSuccess: () => void;
 }
 

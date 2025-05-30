@@ -6,6 +6,7 @@ import { useNotifications } from "@toolpad/core";
 import { SystemWithClientName } from "../models/systemWithClientName";
 import { FullSystemFormData } from "../models/fullSystemFormData";
 import { createStripeProduct } from "../edge-functions-triggers/create_stripe_product_trigger";
+import { FullSystemDetails } from "../models/SystemDetails";
 
 // useGetAllSystemsHook *********************************************************
 const getAllSystems = async (): Promise<SystemSimple[]> => {
@@ -25,16 +26,28 @@ export const useGetAllSystemsHook = () => {
 //*******************************************************************************
 
 // useGetSystemHook *************************************************************
-const getSystem = async (id: string): Promise<SystemWithClientName> => {
+const getSystem = async (id: string): Promise<FullSystemDetails> => {
     const { data, error } = await supabase
-        .rpc('get_full_system_by_id', { sys_id: parseInt(id)}).single();
+        .rpc('get_system_by_id', { sys_id: parseInt(id) }).single();
 
     if (error) throw new Error(error.message);
-    return data as SystemWithClientName;
+
+    const system = data as FullSystemDetails;
+
+    const adjustedData: FullSystemDetails = {
+        ...system,
+        downpayment: system.downpayment ? system.downpayment / 100 : null,
+        monthlypayment: system.monthlypayment ? system.monthlypayment / 100 : null,
+        yearlypayment: system.yearlypayment ? system.yearlypayment / 100 : null,
+        currency: system.currency?.toUpperCase() || null,
+    };
+
+    return adjustedData;
 };
 
+
 export const useGetSystemHook = (systemId: string | null) => {
-    return useQuery<SystemWithClientName, Error>({
+    return useQuery<FullSystemDetails, Error>({
         queryKey: ['getSystem'],
         queryFn: () => getSystem(systemId!),
         enabled: !!systemId,

@@ -79,7 +79,7 @@ export const DetailsEditSystemModal = ({ open, onClose, systemId} : DetailsEditS
                             ) : (
                                 <>
                                     <Grid item xs={12} md={6}>
-                                        <Typography variant="h4">Edit system</Typography>
+                                        <Typography variant="h4">System details</Typography>
                                     </Grid>
                                     <Grid item xs={6} md={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
                                         <SmartHivePrimaryBtn

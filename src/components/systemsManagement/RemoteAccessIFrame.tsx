@@ -1,8 +1,8 @@
 import { Container } from "@mui/material";
-import { SystemWithClientName } from "../../models/systemWithClientName";
+import { FullSystemDetails } from "../../models/SystemDetails";
 
 interface RemoteAccesIFrameProps {
-  system: SystemWithClientName;
+  system: FullSystemDetails;
 }
 
 export const RemoteAccesIFrame = ({ system }: RemoteAccesIFrameProps) => {
