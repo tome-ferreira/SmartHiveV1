@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import { FullSystemDetails } from "../../models/SystemDetails";
+import { FullSystemDetails } from "../../models/systemDetails";
 
 interface RemoteAccesIFrameProps {
   system: FullSystemDetails;

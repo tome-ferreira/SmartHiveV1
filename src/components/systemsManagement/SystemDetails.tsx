@@ -1,6 +1,6 @@
 import { Container, Grid, TextField } from "@mui/material";
 import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
-import { FullSystemDetails } from "../../models/SystemDetails";
+import { FullSystemDetails } from "../../models/systemDetails";
 
 interface SystemDetailsProps {
     system: FullSystemDetails;
