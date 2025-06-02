@@ -7,8 +7,10 @@ export interface FullSystemDetails {
   remoteaccesslink: string;
   installation_product_id: string;
   maintenance_product_id: string;
+  installation_product_active: boolean | null;
+  maintenance_product_active: boolean | null;
   downpayment: number | null;
-  downpaymentPaymentId: string | null;
+  downpaymentpaymentid: string | null;
   monthlypayment: number | null;
   monthlypaymentpaymentid: string | null;
   yearlypayment: number | null;

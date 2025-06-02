@@ -112,7 +112,7 @@ export const usePostSystemHook = () => {
 // useUpdateCostumerRecordHook **************************************************
 var systemId: any = "";
 
-const updateSystem = async (system: SystemWithClientName) => {
+const updateSystem = async (system: FullSystemDetails) => {
   const { data, error } = await supabase
     .from("Systems")
     .update({
@@ -124,7 +124,6 @@ const updateSystem = async (system: SystemWithClientName) => {
       MonthlyPayment: system.monthlypayment,
       YearlyPayment: system.yearlypayment,
       Currency: system.currency,
-      PaymentMethod: system.paymentmethod,
     })
     .eq("id", system.id);
 

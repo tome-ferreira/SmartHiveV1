@@ -130,7 +130,7 @@ export const CreateSystemForm = ({ onSuccess }: CreateSystemFormProps) => {
                         />
                     </Grid>
 
-                    {/* Description */}
+                    {/* Remote Access Link */}
                     <Grid item xs={12} md={12}>
                         <TextField
                             label="Remote Access Link"
