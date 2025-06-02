@@ -6,7 +6,8 @@ import { useNotifications } from "@toolpad/core";
 import { SystemWithClientName } from "../models/systemWithClientName";
 import { FullSystemFormData } from "../models/fullSystemFormData";
 import { createStripeProduct } from "../edge-functions-triggers/create_stripe_product_trigger";
-import { FullSystemDetails } from "../models/SystemDetails";
+import { FullSystemDetails } from "../models/systemDetails";
+import { deleteStripeProduct } from "../edge-functions-triggers/delete_stripe_product_trigger";
 
 // useGetAllSystemsHook *********************************************************
 const getAllSystems = async (): Promise<SystemSimple[]> => {
@@ -160,14 +161,8 @@ export const useUpdateSystemHook = () => {
 // *****************************************************************************
 
 // useDeleteSystemHook *************************************************
-const deleteSystem = async (systemId: string) => {
-  const { error } = await supabase
-    .from("Systems")
-    .delete()
-    .eq("id", systemId);
-
-  if (error) throw new Error(error.message);
-
+const deleteSystem = async (systemId: number) => {
+  await deleteStripeProduct(systemId);
   return systemId;
 };
 
