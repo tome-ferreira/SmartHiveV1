@@ -8,6 +8,7 @@ import { FullSystemFormData } from "../models/fullSystemFormData";
 import { createStripeProduct } from "../edge-functions-triggers/create_stripe_product_trigger";
 import { FullSystemDetails } from "../models/systemDetails";
 import { deleteStripeProduct } from "../edge-functions-triggers/delete_stripe_product_trigger";
+import { updateStripeProduct } from "../edge-functions-triggers/update_stripe_product_trigger";
 
 // useGetAllSystemsHook *********************************************************
 const getAllSystems = async (): Promise<SystemSimple[]> => {
@@ -109,30 +110,100 @@ export const usePostSystemHook = () => {
 }
 //*******************************************************************************
 
-// useUpdateCostumerRecordHook **************************************************
+// useUpdateSystemHook **********************************************************
 var systemId: any = "";
 
-const updateSystem = async (system: FullSystemDetails) => {
+interface UpdateSystemPayload {
+  oldSystem: FullSystemDetails;
+  newSystem: FullSystemDetails;
+}
+
+const updateSystem = async ({ oldSystem, newSystem }: UpdateSystemPayload) => {
+  const updateStripePayloads: UpdateStripePayload[] = [];
+
+  // Handle Installation Product
+  if (
+    oldSystem.name !== newSystem.name ||
+    oldSystem.description !== newSystem.description ||
+    oldSystem.installation_product_active !== newSystem.installation_product_active ||
+    oldSystem.downpayment !== newSystem.downpayment
+  ) {
+    const payload: UpdateStripePayload = {
+      productId: newSystem.installation_product_id,
+      type: 'installation',
+      updatedFields: {
+        name: newSystem.name + " - Instalation",
+        description: newSystem.description,
+        active: newSystem.installation_product_active ?? true,
+        prices: newSystem.downpaymentpaymentid
+          ? [
+              {
+                id: newSystem.downpaymentpaymentid,
+                amount: newSystem.downpayment! * 100,
+              },
+            ]
+          : [],
+      },
+    };
+    updateStripePayloads.push(payload);
+  }
+
+  // Handle Maintenance Product
+  if (
+    oldSystem.maintenance_product_active !== newSystem.maintenance_product_active ||
+    oldSystem.monthlypayment !== newSystem.monthlypayment ||
+    oldSystem.yearlypayment !== newSystem.yearlypayment
+  ) {
+    const prices = [];
+
+    if (newSystem.monthlypaymentpaymentid) {
+      prices.push({
+        id: newSystem.monthlypaymentpaymentid,
+        amount: newSystem.monthlypayment! * 100,
+      });
+    }
+
+    if (newSystem.yearlypaymentpaymentid) {
+      prices.push({
+        id: newSystem.yearlypaymentpaymentid,
+        amount: newSystem.yearlypayment! * 100,
+      });
+    }
+
+    updateStripePayloads.push({
+      productId: newSystem.maintenance_product_id,
+      type: 'maintenance',
+      updatedFields: {
+        name: newSystem.name + " - Maintenence",
+        description: newSystem.description,
+        active: newSystem.isactive ?? true,
+        prices,
+      },
+    });
+  }
+
+  // Update system in Supabase
   const { data, error } = await supabase
     .from("Systems")
     .update({
-      ClientId: system.clientid,
-      Name: system.name,
-      Description: system.description,
-      RemoteAccessLink: system.remoteaccesslink,
-      Downpayment: system.downpayment,
-      MonthlyPayment: system.monthlypayment,
-      YearlyPayment: system.yearlypayment,
-      Currency: system.currency,
+      ClientId: newSystem.clientid,
+      Name: newSystem.name,
+      Description: newSystem.description,
+      RemoteAccessLink: newSystem.remoteaccesslink,
+      maintenance_active: newSystem.isactive,
     })
-    .eq("id", system.id);
-
-    systemId = system.id
+    .eq("id", newSystem.id);
 
   if (error) throw new Error(error.message);
 
+  // Call Edge Function
+  for (const payload of updateStripePayloads) {
+    await updateStripeProduct(payload);
+  }
+
   return data;
 };
+
 
 export const useUpdateSystemHook = () => {
   const notifications = useNotifications();
@@ -141,22 +212,23 @@ export const useUpdateSystemHook = () => {
   return useMutation({
     mutationFn: updateSystem,
     onSuccess: () => {
-      notifications.show("Customer record updated successfully!", {
+      notifications.show("System updated successfully!", {
         severity: "success",
         autoHideDuration: 3000,
       });
 
-      queryClient.invalidateQueries({ queryKey: ['getSystem'] })
+      queryClient.invalidateQueries({ queryKey: ['getSystem'] });
       queryClient.invalidateQueries({ queryKey: ['getAllSystems'] });
     },
     onError: (error: Error) => {
-      notifications.show(`Failed to update customer record: ${error.message}`, {
+      notifications.show(`Failed to update system: ${error.message}`, {
         severity: "error",
         autoHideDuration: 5000,
       });
     },
   });
 };
+
 // *****************************************************************************
 
 // useDeleteSystemHook *************************************************
