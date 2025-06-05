@@ -58,7 +58,6 @@ export function ContactForm({ onClose }: ContactFormProps) {
       await submitForm(formData)
       setSubmitted(true)
 
-      // Close the form after 2 seconds
       setTimeout(() => {
         onClose()
       }, 2000)
@@ -86,8 +85,6 @@ export function ContactForm({ onClose }: ContactFormProps) {
     </motion.div>
   ) : (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Form content stays the same */}
-      {/* ... [form fields go here unchanged] ... */}
 
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">

@@ -10,6 +10,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { BsFileEarmarkPersonFill } from "react-icons/bs";
 import { SiHomeassistant } from "react-icons/si";
+import { FaMailBulk } from "react-icons/fa";
 /*******/
 
 const NAVIGATION: Navigation = [
@@ -30,6 +31,11 @@ const NAVIGATION: Navigation = [
   {
     kind: 'header',
     title: 'Users management',
+  },
+  {
+    segment: 'Admin/FormResponses',
+    title: 'Form Responses',
+    icon: <FaMailBulk />,
   },
   {
     segment: 'Admin/ManageUsers',

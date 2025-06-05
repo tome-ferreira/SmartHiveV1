@@ -5,5 +5,6 @@ export interface FormsBase {
   Name: string;        
   Email: string;       
   user_id?: string | null; 
-  created_at?: string | null;  
+  created_at?: string | null;
+  Seen?: boolean  
 }

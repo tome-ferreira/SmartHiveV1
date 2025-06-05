@@ -24,6 +24,8 @@ import ManageUsers from './pages/AdminGroup/ManageUsers';
 import { RedirectPage } from './pages/AuthorizedGroup/RedirectPage';
 import CostumerRecordsPage from './pages/AdminGroup/CostumerRecords';
 import { SystemsPage } from './pages/AdminGroup/Systems';
+import FormResponsesPage from './pages/AdminGroup/FormResponses';
+
 
 const queryClient = new QueryClient();
 
@@ -89,6 +91,10 @@ const router = createBrowserRouter([
           {
             path: '/Admin/Systems',
             Component: SystemsPage
+          },
+          {
+            path: '/Admin/FormResponses',
+            Component: FormResponsesPage
           }
         ]
       },
