@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { ContactFormData } from "../../models/contactFormData"
+import { usePostContactFormHook } from "../../hooks/FormsHooks"
+import { useNotifications } from "@toolpad/core"
 
 interface ContactFormProps {
-  onSubmit: (data: ContactFormData) => void
   onClose: () => void
 }
 
-export function ContactForm({ onSubmit, onClose }: ContactFormProps) {
+export function ContactForm({ onClose }: ContactFormProps) {
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
@@ -17,12 +18,13 @@ export function ContactForm({ onSubmit, onClose }: ContactFormProps) {
   })
 
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({})
+  const [submitted, setSubmitted] = useState(false)
+  const { mutateAsync: submitForm } = usePostContactFormHook()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
-    // Clear error when user types
     if (errors[name as keyof ContactFormData]) {
       setErrors((prev) => ({ ...prev, [name]: "" }))
     }
@@ -49,18 +51,44 @@ export function ContactForm({ onSubmit, onClose }: ContactFormProps) {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (validateForm()) {
-      console.log("Form submitted with data:", formData)
-      onSubmit(formData)
-      onClose()
+      await submitForm(formData)
+      setSubmitted(true)
+
+      // Close the form after 2 seconds
+      setTimeout(() => {
+        onClose()
+      }, 2000)
     }
   }
 
-  return (
+  return submitted ? (
+    <motion.div
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="flex flex-col items-center justify-center p-6 bg-green-700 rounded-lg text-white"
+    >
+      <svg
+        className="w-12 h-12 mb-4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      <p className="text-lg font-semibold">Submission Successful!</p>
+      <p className="text-sm text-green-100 mt-1">We'll be in touch shortly.</p>
+    </motion.div>
+  ) : (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Form content stays the same */}
+      {/* ... [form fields go here unchanged] ... */}
+
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
           Name

@@ -138,10 +138,7 @@ export function HeroSection() {
     },
   }
 
-  const handleFormSubmit = (data: ContactFormData) => {
-    console.log("Contact form submitted:", data)
-    // You can handle the form data here, e.g., send it to your API
-  }
+  
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" ref={heroRef}>
@@ -310,7 +307,7 @@ export function HeroSection() {
 
       {/* Contact Form Modal */}
       <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Request a Consultation">
-        <ContactForm onSubmit={handleFormSubmit} onClose={() => setIsModalOpen(false)} />
+        <ContactForm onClose={() => setIsModalOpen(false)} />
       </ContactModal>
     </section>
   )

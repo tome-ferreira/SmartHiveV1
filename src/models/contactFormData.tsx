@@ -1,7 +1,7 @@
 export interface ContactFormData {
   name: string
   email: string
-  phone?: string // Optional
+  phone?: string 
   location: string
-  notes?: string // Optional
+  notes?: string 
 }
