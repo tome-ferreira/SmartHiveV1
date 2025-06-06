@@ -3,6 +3,7 @@ import { WiMoonFull } from "react-icons/wi";
 import { FormsBase } from "../../models/formsBase";
 import { FormResponseDetailsModal } from "./formResponseDetailsModal";
 import { useState } from "react";
+import { useMarkFormAsSeenHook } from "../../hooks/FormsHooks";
 
 type FormResponseMiniProps = {
     form: FormsBase
@@ -20,13 +21,15 @@ export const getDisplayType = (type: string) => {
 
 const FormResponseMini: React.FC<FormResponseMiniProps> = ({form}) =>{
     const [openDetailsModal, setOpenDetailsModal] = useState(false);
+    const { mutateAsync: markAsSeen } = useMarkFormAsSeenHook();
 
     const handleCloseDetailsModal = () => {
         setOpenDetailsModal(false);
     };
 
-    const handleDetailsClick = () => {
+    const handleDetailsClick = async () => {
         setOpenDetailsModal(!openDetailsModal);
+        await markAsSeen(form.id || -1);
     }
 
     return (<>

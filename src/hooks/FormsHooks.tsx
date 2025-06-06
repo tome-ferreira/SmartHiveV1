@@ -92,7 +92,7 @@ const limit: number = 10;
 const offset: number = 0;
 
 const markFormAsSeen = async (id: number) => {
-    const { data, error } = await supabase.from("FormsBase").update({ Seen: true }).eq("id", id);          
+    const { data, error } = await supabase.from("FormsBase").update({ Seen: true }).eq("id", id).select();       
 
     if (error) throw new Error(error.message);
 
@@ -105,8 +105,41 @@ export const useMarkFormAsSeenHook = () => {
     return useMutation({
         mutationFn: markFormAsSeen,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['getFormsAdmin', limit, offset] })
+            queryClient.invalidateQueries({ queryKey: ['getFormsAdmin', limit, offset] });
         }
     });
 }
+// ******************************************************************************************
+
+// useDeleteFormHook ************************************************************************
+const deleteForm = async (id: number) => {
+    const { data, error } = await supabase.from("FormsBase").delete().eq("id", id);
+
+    if (error) throw new Error(error.message);
+
+    return data;
+}
+
+export const useDeleteFormHook = () => {
+  const notifications = useNotifications();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteForm,
+    onSuccess: () => {
+      notifications.show('Form response deleted successfully!', {
+        severity: 'success',
+        autoHideDuration: 3000,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['getFormsAdmin', limit, offset] });
+    },
+    onError: (error: Error) => {
+      notifications.show(`Failed to delete form response: ${error.message}`, {
+        severity: 'error',
+        autoHideDuration: 5000,
+      });
+    },
+  });
+};
 // ******************************************************************************************
