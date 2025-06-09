@@ -46,7 +46,7 @@ const FormResponsesPage = () => {
             if (!nameMatch && !emailMatch) return false;
         }
 
-        return true;
+        return true; 
     });
 
     return (
