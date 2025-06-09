@@ -1,10 +1,29 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Shield, Menu, X } from "lucide-react"
+import { useAuth } from "../../contexts/AuthContext"
+import { useIsAdminHook, useIsClientHook } from "../../hooks/AuthHooks"
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrollY, setScrollY] = useState(0)
+  const { user, signOut } = useAuth();
+  const { data: isAdmin } = useIsAdminHook();
+  const { data: isClient } = useIsClientHook();
+
+  var navLoc: string = "";
+  var logBtnText: string = "";
+
+  if (isAdmin) {
+    logBtnText = "Administrative Area";
+    navLoc = "/Admin/Dashboard";
+  }else if(isClient){
+    logBtnText = "Client Area";
+    navLoc = "/Client/Dashboard";
+  }else{
+    logBtnText = "Login";
+    navLoc = "/sign-in";   
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -32,7 +51,7 @@ export function Navbar() {
             style={{ transformStyle: "preserve-3d" }}
           >
             <motion.div
-              className="w-10 h-10 bg-gradient-to-r from-[#36916a] to-emerald-400 rounded-lg flex items-center justify-center"
+              className="w-10 h-10 rounded-lg flex items-center justify-center"
               whileHover={{
                 rotateY: 360,
                 rotateX: 15,
@@ -40,10 +59,10 @@ export function Navbar() {
               transition={{ duration: 0.8 }}
               style={{ transformStyle: "preserve-3d" }}
             >
-              <Shield className="w-6 h-6 text-white" />
+              <img src="/img/logos/SmartHiveLogoSml.png" alt="SmartHive logo" />
             </motion.div>
             <span className="text-xl font-bold bg-gradient-to-r from-[#36916a] to-emerald-400 bg-clip-text text-transparent">
-              SmartHome Pro
+              SmartHive
             </span>
           </motion.div>
 
@@ -91,10 +110,10 @@ export function Navbar() {
               whileTap={{ scale: 0.95 }}
               style={{ transformStyle: "preserve-3d" }}
               onClick={() => {
-                window.location.href = "/login"
+                window.location.href = navLoc
               }}
             >
-              Client Login
+              {logBtnText}
             </motion.button>
           </div>
 

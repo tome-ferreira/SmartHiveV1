@@ -48,7 +48,7 @@ export function FooterSection() {
           >
             <div className="flex items-center space-x-2 mb-4">
               <motion.div
-                className="w-10 h-10 bg-gradient-to-r from-[#36916a] to-emerald-400 rounded-lg flex items-center justify-center"
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
                 whileHover={{
                   rotateY: 360,
                   rotateX: 180,
@@ -56,10 +56,10 @@ export function FooterSection() {
                 transition={{ duration: 0.8 }}
                 style={{ transformStyle: "preserve-3d" }}
               >
-                <Shield className="w-6 h-6 text-white" />
+                <img src="/img/logos/SmartHiveLogoSml.png" alt="SmartHive logo" />
               </motion.div>
               <span className="text-xl font-bold bg-gradient-to-r from-[#36916a] to-emerald-400 bg-clip-text text-transparent">
-                SmartHome Pro
+                SmartHive
               </span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
@@ -108,10 +108,10 @@ export function FooterSection() {
             <h3 className="text-lg font-semibold mb-4 text-white">Contact</h3>
             <ul className="space-y-2 text-gray-400">
               {[
-                "Phone: (555) 123-4567",
-                "Email: info@smarthomepro.com",
-                "Address: 123 Tech Street",
-                "City, State 12345",
+                "Phone: 955 555 555",
+                "Email: info@smarthive.pt",
+                "Address: Rua Direita nº165",
+                "Barcelos, Braga 4750-111",
               ].map((contact, index) => (
                 <motion.li
                   key={contact}
@@ -139,7 +139,7 @@ export function FooterSection() {
           viewport={{ once: true }}
           style={{ transformStyle: "preserve-3d" }}
         >
-          <p>&copy; 2024 SmartHome Pro. All rights reserved.</p>
+          <p>&copy; 2025 SmartHive. All rights reserved.</p>
         </motion.div>
       </div>
     </motion.footer>

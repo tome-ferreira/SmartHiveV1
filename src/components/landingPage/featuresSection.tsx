@@ -34,7 +34,7 @@ export function FeaturesSection() {
               <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Why Choose</span>
               <br />
               <span className="bg-gradient-to-r from-[#36916a] to-emerald-400 bg-clip-text text-transparent">
-                SmartHome Pro?
+                SmartHive?
               </span>
             </motion.h2>
 

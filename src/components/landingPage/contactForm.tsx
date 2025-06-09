@@ -133,7 +133,7 @@ export function ContactForm({ onClose }: ContactFormProps) {
           value={formData.phone}
           onChange={handleChange}
           className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#36916a] text-white"
-          placeholder="(555) 123-4567"
+          placeholder="999 999 999"
         />
       </div>
 
