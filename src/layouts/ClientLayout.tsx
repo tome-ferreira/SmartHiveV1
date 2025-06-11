@@ -10,8 +10,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 const NAVIGATION: Navigation = [
   {
     segment: 'Client/Dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
+    title: 'Dashboard', 
+    icon: <DashboardIcon />, 
   }
 ];
 
