@@ -116,13 +116,11 @@ const router = createBrowserRouter([
           {
             path: '/Client/Systems',
             Component: UserSystemsPage,
-            children: [
-              {
-                path: 'Details/:systemId',
-                Component: UserSystemDetailsPage,
-              },
-            ],
-          }
+          },
+          {
+            path: '/Client/Systems/Details/:systemId',
+            Component: UserSystemDetailsPage,
+          },
         ],
       },
     ],
