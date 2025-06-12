@@ -9,6 +9,7 @@ import { createStripeProduct } from "../edge-functions-triggers/create_stripe_pr
 import { FullSystemDetails } from "../models/systemDetails";
 import { deleteStripeProduct } from "../edge-functions-triggers/delete_stripe_product_trigger";
 import { updateStripeProduct } from "../edge-functions-triggers/update_stripe_product_trigger";
+import { UserSystemMini } from "../models/userSystemMini";
 
 // useGetAllSystemsHook *********************************************************
 const getAllSystems = async (): Promise<SystemSimple[]> => {
@@ -260,3 +261,25 @@ export const useDeleteSystemHook = () => {
   });
 };
 // ****************************************************************************
+
+// useGetAllUserSystemsHook *****************************************************
+const getAllUserSystems = async (userId: string): Promise<UserSystemMini[]> => {
+  const { data: recordData, error: recordError } = await supabase.from("CostumerRecords").select("id").eq("UserId", userId).single();
+
+  if (recordError) throw new Error(recordError.message);
+
+  const  {data: systemsData, error: systemsError} = await supabase.from("Systems").select("id, Name").eq("ClientId", recordData.id);
+
+  if (systemsError) throw new Error(systemsError.message);
+
+  return systemsData as UserSystemMini[];
+};
+
+export const useGetAllUserSystemsHook = (userId: string ) => {
+  return useQuery<UserSystemMini[], Error>({
+    queryKey: ['getAllUserSystems', userId],
+    queryFn: () => getAllUserSystems(userId!),
+    enabled: !!userId, 
+  });
+};
+//*******************************************************************************

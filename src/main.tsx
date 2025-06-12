@@ -25,6 +25,8 @@ import { RedirectPage } from './pages/AuthorizedGroup/RedirectPage';
 import CostumerRecordsPage from './pages/AdminGroup/CostumerRecords';
 import { SystemsPage } from './pages/AdminGroup/Systems';
 import FormResponsesPage from './pages/AdminGroup/FormResponses';
+import UserSystemsPage from './pages/ClientGroup/UserSystems';
+import UserSystemDetailsPage from './pages/ClientGroup/UserSystemDetailsPage';
 
 
 const queryClient = new QueryClient();
@@ -111,6 +113,16 @@ const router = createBrowserRouter([
             path: '/Client/Dashboard',
             Component: UserDashboard,
           },
+          {
+            path: '/Client/Systems',
+            Component: UserSystemsPage,
+            children: [
+              {
+                path: 'Details/:systemId',
+                Component: UserSystemDetailsPage,
+              },
+            ],
+          }
         ],
       },
     ],

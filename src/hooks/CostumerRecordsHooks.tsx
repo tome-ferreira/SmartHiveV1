@@ -4,6 +4,7 @@ import { supabase } from "../services/supabase-client";
 import { UserSimple } from "../models/userSimple";
 import { useNotifications } from "@toolpad/core";
 import { CostumerRecordSimple } from "../models/costumerRecordSimple";
+import { UserSystemMini } from "../models/userSystemMini";
 
 // useGetAllCostumerRecordsHook *************************************************
 const getAllCostumerRecords = async (): Promise<CostumerRecordSimple[]> => {
