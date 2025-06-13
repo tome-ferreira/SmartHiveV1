@@ -4,6 +4,7 @@ import { ContactFormData } from "../models/contactFormData";
 import { FormsBase } from "../models/formsBase";
 import { supabase } from "../services/supabase-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { InterventionRequestFormData } from "../models/interventionRequestFormData";
 
 // usePostContactFormHook *******************************************************************
 const postContactForm = async (formResponse: ContactFormData) => {
@@ -142,4 +143,44 @@ export const useDeleteFormHook = () => {
     },
   });
 };
+// ******************************************************************************************
+
+// usePostInterventionRequestFormHook *******************************************************************
+const postInterventionRequest = async ({ formBase, formResponse, }: { formBase: FormsBase; formResponse: InterventionRequestFormData; }) => {
+    const {data: baseData, error: baseError } = await supabase
+        .from("FormsBase")
+        .insert(formBase)
+        .select()
+        .single();
+
+    if (baseError) throw new Error(baseError.message);
+
+    formResponse.base = baseData.id;
+
+    const {data: dataData, error: dataError} = await supabase
+        .from("InterventionRequestFormData")
+        .insert(formResponse);
+    
+    if(dataError) throw new Error(dataError.message);
+}
+
+export const usePostInterventionRequestFormHook = ()  => {
+    const notifications = useNotifications();
+
+    return useMutation({
+        mutationFn: postInterventionRequest,
+        onSuccess: () => {
+            notifications.show('Message sent successfully!', {
+                severity: 'success',
+                autoHideDuration: 3000,
+            });
+        },
+        onError: (error: Error) => {
+            notifications.show(`Failed send message: ${error.message}`, {
+                severity: 'error',
+                autoHideDuration: 5000,
+            });
+        },
+    })
+}
 // ******************************************************************************************

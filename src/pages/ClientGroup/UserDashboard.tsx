@@ -9,7 +9,7 @@ const UserDashboard = () => {
           <h1 className="text-2xl font-bold mb-4">Hello, you're authenticated!</h1>
             {user ? (
               <>
-                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>Email:</strong> {user.user_metadata.display_name}</p>
               </>
             ) : (
               <p>Loading user info...</p>
