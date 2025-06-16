@@ -6,6 +6,8 @@ import { supabase } from "../services/supabase-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { InterventionRequestFormData } from "../models/interventionRequestFormData";
 import { EndServiceRequestFormData } from "../models/endServiceRequestFormData";
+import { InterventionAppointmentFormData } from "../models/interventionAppointmentFormData";
+import { InterventionAppointment } from "../models/interventionAppointment";
 
 // usePostContactFormHook *******************************************************************
 const postContactForm = async (formResponse: ContactFormData) => {
@@ -224,4 +226,63 @@ export const usePostEndServiceRequestFormHook = ()  => {
         },
     })
 }
+// ******************************************************************************************
+
+// usePostInterventionAppointmentFormHook *******************************************************************
+const postInterventionAppointment = async ({ formBase, formResponse, }: { formBase: FormsBase; formResponse: InterventionAppointmentFormData; }) => {
+    const {data: baseData, error: baseError } = await supabase
+        .from("FormsBase")
+        .insert(formBase)
+        .select()
+        .single();
+
+    if (baseError) throw new Error(baseError.message);
+
+    formResponse.base = baseData.id;
+
+    const {data: dataData, error: dataError} = await supabase
+        .from("InterventionAppointmentFormData")
+        .insert(formResponse);
+    
+    if(dataError) throw new Error(dataError.message);
+}
+
+export const usePostInterventionAppointmentFormHook = ()  => {
+    const notifications = useNotifications();
+
+    return useMutation({
+        mutationFn: postInterventionAppointment,
+        onSuccess: () => {
+            notifications.show('Message sent successfully!', {
+                severity: 'success',
+                autoHideDuration: 3000,
+            });
+        },
+        onError: (error: Error) => {
+            notifications.show(`Failed send message: ${error.message}`, {
+                severity: 'error',
+                autoHideDuration: 5000,
+            });
+        },
+    })
+}
+// ******************************************************************************************
+
+// useGetSystemsInterventionAppointmentsHook ************************************************
+const getSystemInterventionAppointments = async (systemId: number): Promise<InterventionAppointment[]> => {
+    const { data, error } = await supabase.rpc('get_interventions_by_system', { system_id: systemId });
+
+    if (error) throw new Error(error.message);
+
+    return data as InterventionAppointment[];
+};
+
+export const useGetSystemsInterventionAppointmentsHook = (systemId: number) => {
+    return useQuery<InterventionAppointment[], Error>({
+        queryKey: ['getSystemInterventionAppointments', systemId],
+        queryFn: () => getSystemInterventionAppointments(systemId),
+        enabled: !!systemId, 
+    });
+};
+
 // ******************************************************************************************
