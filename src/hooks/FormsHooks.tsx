@@ -5,6 +5,7 @@ import { FormsBase } from "../models/formsBase";
 import { supabase } from "../services/supabase-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { InterventionRequestFormData } from "../models/interventionRequestFormData";
+import { EndServiceRequestFormData } from "../models/endServiceRequestFormData";
 
 // usePostContactFormHook *******************************************************************
 const postContactForm = async (formResponse: ContactFormData) => {
@@ -169,6 +170,46 @@ export const usePostInterventionRequestFormHook = ()  => {
 
     return useMutation({
         mutationFn: postInterventionRequest,
+        onSuccess: () => {
+            notifications.show('Message sent successfully!', {
+                severity: 'success',
+                autoHideDuration: 3000,
+            });
+        },
+        onError: (error: Error) => {
+            notifications.show(`Failed send message: ${error.message}`, {
+                severity: 'error',
+                autoHideDuration: 5000,
+            });
+        },
+    })
+}
+// ******************************************************************************************
+
+// usePostEndServiceRequestFormHook *******************************************************************
+const postEndServiceRequest = async ({ formBase, formResponse, }: { formBase: FormsBase; formResponse: EndServiceRequestFormData; }) => {
+    const {data: baseData, error: baseError } = await supabase
+        .from("FormsBase")
+        .insert(formBase)
+        .select()
+        .single();
+
+    if (baseError) throw new Error(baseError.message);
+
+    formResponse.base = baseData.id;
+
+    const {data: dataData, error: dataError} = await supabase
+        .from("EndServiceRequestFormData")
+        .insert(formResponse);
+    
+    if(dataError) throw new Error(dataError.message);
+}
+
+export const usePostEndServiceRequestFormHook = ()  => {
+    const notifications = useNotifications();
+
+    return useMutation({
+        mutationFn: postEndServiceRequest,
         onSuccess: () => {
             notifications.show('Message sent successfully!', {
                 severity: 'success',

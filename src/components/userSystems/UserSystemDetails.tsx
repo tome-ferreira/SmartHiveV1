@@ -6,6 +6,7 @@ import SmartHivePrimaryBtn from "../utils/btns/SmartHivePrimaryBtn";
 import SmartHiveDangerBtn from "../utils/btns/SmartHiveDangerBtn";
 import InterventionRequestFormModal from "./InterventionRequestFormModal";
 import { useAuth } from "../../contexts/AuthContext";
+import EndServiceRequestFormModal from "./EndServiceRequestFormModal";
 
 interface Props {
     system: FullSystemDetails;
@@ -14,6 +15,7 @@ interface Props {
 export const UserSystemDetails = ({ system }: Props) => {
     const [selectedCurrencySymbol, setSelectedCurrencySymbol] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
+    const [endMoodalOpen, setEndModalOpen] = useState(false);
     const { user } = useAuth();
 
     let status = "";
@@ -152,7 +154,7 @@ export const UserSystemDetails = ({ system }: Props) => {
                             <SmartHivePrimaryBtn text="Request System Intervention" className="w-full" onClick={() => setModalOpen(true)} />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <SmartHiveDangerBtn label="Request End of Service" className="w-full"/>
+                            <SmartHiveDangerBtn label="Request End of Service" className="w-full" onClick={() => setEndModalOpen(true)}/>
                         </Grid>
                     </Grid>
                 </Box>
@@ -161,6 +163,15 @@ export const UserSystemDetails = ({ system }: Props) => {
             <InterventionRequestFormModal
                 open={modalOpen}
                 onClose={() => setModalOpen(false)}
+                userName={user?.user_metadata.display_name ||""}        
+                userEmail={user?.email || ""} 
+                userId={user?.id || ""} 
+                systemId={system.id}
+            />
+
+            <EndServiceRequestFormModal 
+                open={endMoodalOpen}
+                onClose={() => setEndModalOpen(false)}
                 userName={user?.user_metadata.display_name ||""}        
                 userEmail={user?.email || ""} 
                 userId={user?.id || ""} 
