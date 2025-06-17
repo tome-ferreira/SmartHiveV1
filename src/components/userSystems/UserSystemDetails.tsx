@@ -7,6 +7,9 @@ import SmartHiveDangerBtn from "../utils/btns/SmartHiveDangerBtn";
 import InterventionRequestFormModal from "./InterventionRequestFormModal";
 import { useAuth } from "../../contexts/AuthContext";
 import EndServiceRequestFormModal from "./EndServiceRequestFormModal";
+import { useGetSystemsInterventionAppointmentsHook } from "../../hooks/FormsHooks";
+import SmartHiveLoading from "../utils/loading/SmartHiveLoading";
+import InterventionAppointmentMiniUser from "./InterventionAppointmentMiniUser";
 
 interface Props {
     system: FullSystemDetails;
@@ -155,6 +158,47 @@ export const UserSystemDetails = ({ system }: Props) => {
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <SmartHiveDangerBtn label="Request End of Service" className="w-full" onClick={() => setEndModalOpen(true)}/>
+                        </Grid>
+                    </Grid>
+                </Box>
+
+
+
+                <Divider />
+
+                {/* Intervention Schedule */}
+                <Box>
+                    <Typography variant="h6" mb={2}>
+                        Intervention Schedule
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            {/** Fetch and display appointments */}
+                            {(() => {
+                                const { data, isLoading, error } = useGetSystemsInterventionAppointmentsHook(system.id);
+                        
+                                if (isLoading) {
+                                    return (<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                                <SmartHiveLoading />
+                                            </Box>);
+                                }
+                        
+                                if (error) {
+                                    return <p className="text-red-500">Error loading record</p>;
+                                }
+                        
+                                if (!data || data.length === 0) {
+                                    return <Typography>No upcoming appointments.</Typography>;
+                                }
+                        
+                                return (
+                                    <div className="flex flex-col gap-3 mt-2">
+                                        {data.map((appointment) => (
+                                            <InterventionAppointmentMiniUser key={appointment.intervention_id} appointment={appointment} systemId={system.id.toString()}/>
+                                        ))}
+                                    </div>
+                                );
+                            })()}
                         </Grid>
                     </Grid>
                 </Box>

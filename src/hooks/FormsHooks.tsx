@@ -249,6 +249,7 @@ const postInterventionAppointment = async ({ formBase, formResponse, }: { formBa
 
 export const usePostInterventionAppointmentFormHook = ()  => {
     const notifications = useNotifications();
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: postInterventionAppointment,
@@ -257,6 +258,7 @@ export const usePostInterventionAppointmentFormHook = ()  => {
                 severity: 'success',
                 autoHideDuration: 3000,
             });
+            queryClient.invalidateQueries({ queryKey: ['getSystemInterventionAppointments'] });
         },
         onError: (error: Error) => {
             notifications.show(`Failed send message: ${error.message}`, {
@@ -279,10 +281,62 @@ const getSystemInterventionAppointments = async (systemId: number): Promise<Inte
 
 export const useGetSystemsInterventionAppointmentsHook = (systemId: number) => {
     return useQuery<InterventionAppointment[], Error>({
-        queryKey: ['getSystemInterventionAppointments', systemId],
+        queryKey: ['getSystemInterventionAppointments'],
         queryFn: () => getSystemInterventionAppointments(systemId),
         enabled: !!systemId, 
     });
 };
 
+// ******************************************************************************************
+
+// useAcceptInterventionAppointmentHook *****************************************************
+type AcceptMutationArgs = {
+    appointmentId: number;
+    systemId: string;
+};
+
+const acceptInterventionAppointment = async ({ appointmentId }: AcceptMutationArgs): Promise<void> => {
+    const { error } = await supabase.rpc("accept_intervention_appointment", { appointment_id: appointmentId });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+};
+
+export const useAcceptInterventionAppointmentHook = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<void, Error, AcceptMutationArgs>({
+        mutationFn: acceptInterventionAppointment,
+        onSuccess: (_data, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['getSystemInterventionAppointments'] });
+        },
+    });
+};
+// ******************************************************************************************
+
+// useRefuseInterventionAppointmentHook *****************************************************
+type RefuseMutationArgs = {
+    appointmentId: number;
+    systemId: string;
+};
+
+const refuseInterventionAppointment = async ({ appointmentId }: RefuseMutationArgs): Promise<void> => {
+    const { error } = await supabase.rpc("refuse_intervention_appointment", { appointment_id: appointmentId });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+};
+
+export const useRefuseInterventionAppointmentHook = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<void, Error, RefuseMutationArgs>({
+        mutationFn: refuseInterventionAppointment,
+        onSuccess: (_data, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['getSystemInterventionAppointments'] });
+        },
+    });
+};
 // ******************************************************************************************
