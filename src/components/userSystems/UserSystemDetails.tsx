@@ -10,6 +10,7 @@ import EndServiceRequestFormModal from "./EndServiceRequestFormModal";
 import { useGetSystemsInterventionAppointmentsHook } from "../../hooks/FormsHooks";
 import SmartHiveLoading from "../utils/loading/SmartHiveLoading";
 import InterventionAppointmentMiniUser from "./InterventionAppointmentMiniUser";
+import { handleDownpayment } from "../../edge-functions-triggers/handle_stripe_downpayment";
 
 interface Props {
     system: FullSystemDetails;
@@ -89,6 +90,15 @@ export const UserSystemDetails = ({ system }: Props) => {
                                             InputProps={{ readOnly: true }}
                                         />
                                     </Grid>
+                                    {status === "Awaiting installation downpayment" && (
+                                        <Grid item xs={12}>
+                                            <SmartHivePrimaryBtn
+                                            text="Pay Downpayment"
+                                            onClick={() => handleDownpayment(system)}
+                                            className="w-full"
+                                            />
+                                        </Grid>
+                                    )}
                                 </Grid>
                             </Paper>
                         </Grid>
