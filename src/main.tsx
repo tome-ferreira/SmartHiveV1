@@ -27,6 +27,7 @@ import { SystemsPage } from './pages/AdminGroup/Systems';
 import FormResponsesPage from './pages/AdminGroup/FormResponses';
 import UserSystemsPage from './pages/ClientGroup/UserSystems';
 import UserSystemDetailsPage from './pages/ClientGroup/UserSystemDetailsPage';
+import PaymentSucess from './pages/ClientGroup/PaymentSucess';
 
 
 const queryClient = new QueryClient();
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
   {
     Component: ClientGroup,
     children: [
+      {
+        path: '/payment-success',
+        Component: PaymentSucess
+      },
       {
         path: '/Client',
         Component: ClientLayout,

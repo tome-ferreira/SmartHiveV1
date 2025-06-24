@@ -25,13 +25,13 @@ export const UserSystemDetails = ({ system }: Props) => {
     let status = "";
     let statusColor = "default";
 
-    if (system.installation_product_active && !system.isactive && !system.maintenance_product_active) {
+    if (system.installation_product_active && !system.isactive ) {
         status = "Awaiting installation downpayment";
         statusColor = "error";
-    } else if (!system.installation_product_active && !system.isactive && !system.maintenance_product_active) {
+    } else if (!system.installation_product_active && !system.isactive ) {
         status = "Awaiting installation";
         statusColor = "warning";
-    } else if (!system.installation_product_active && system.isactive && system.maintenance_product_active) {
+    } else if (!system.installation_product_active && system.isactive ) {
         status = "Maintenance phase";
         statusColor = "success";
     }

@@ -283,3 +283,22 @@ export const useGetAllUserSystemsHook = (userId: string ) => {
   });
 };
 //*******************************************************************************
+
+// useDeactivateDownpaimentHook *************************************************
+const deactivateDownpaiment = async (systemId: string) => {
+  const { data, error } = await supabase.rpc('deactivate_installation_product', { system_id: systemId });
+
+  if (error) throw new Error(error.message);
+}
+
+export const useDeactivateDownpaimentHook = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deactivateDownpaiment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getSystem'] });
+    },
+  });
+};
+// ***************************************************************************

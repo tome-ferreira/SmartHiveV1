@@ -2,8 +2,7 @@ import { FullSystemDetails } from "../models/systemDetails";
 
 export const handleDownpayment = async (system: FullSystemDetails) => {
     try {
-        //const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1/pay_downpayment`, {
-        const response = await fetch(`http://127.0.0.1:54321/functions/v1/pay_downpayment`, {
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL as string}/functions/v1/pay_downpayment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

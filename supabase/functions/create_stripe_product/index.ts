@@ -53,7 +53,7 @@ Deno.serve(async (req) => {
       name: `${name} - Maintenance`,
       description: `Maintenance plan for ${description}`,
       metadata: { system_id: String(system_id), type: 'maintenance' },
-      active: false, 
+      active: true, 
     })
 
     // Create prices
@@ -98,7 +98,7 @@ Deno.serve(async (req) => {
         id: maintenanceProduct.id,
         name: maintenanceProduct.name,
         description: maintenanceProduct.description,
-        active: maintenanceProduct.active,
+        active: false,
         metadata: maintenanceProduct.metadata,
         stripe_product_id: maintenanceProduct.id
       })
