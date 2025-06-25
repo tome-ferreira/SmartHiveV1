@@ -177,7 +177,7 @@ const updateSystem = async ({ oldSystem, newSystem }: UpdateSystemPayload) => {
       updatedFields: {
         name: newSystem.name + " - Maintenence",
         description: newSystem.description,
-        active: newSystem.isactive ?? true,
+        active: true,
         prices,
       },
     });

@@ -28,6 +28,7 @@ import FormResponsesPage from './pages/AdminGroup/FormResponses';
 import UserSystemsPage from './pages/ClientGroup/UserSystems';
 import UserSystemDetailsPage from './pages/ClientGroup/UserSystemDetailsPage';
 import PaymentSucess from './pages/ClientGroup/PaymentSucess';
+import PaymentCancelled from './pages/ClientGroup/PaymentCancelled';
 
 
 const queryClient = new QueryClient();
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
       {
         path: '/payment-success',
         Component: PaymentSucess
+      },
+      {
+        path: '/payment-cancelled',
+        Component: PaymentCancelled
       },
       {
         path: '/Client',

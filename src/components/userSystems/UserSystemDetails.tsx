@@ -11,6 +11,7 @@ import { useGetSystemsInterventionAppointmentsHook } from "../../hooks/FormsHook
 import SmartHiveLoading from "../utils/loading/SmartHiveLoading";
 import InterventionAppointmentMiniUser from "./InterventionAppointmentMiniUser";
 import { handleDownpayment } from "../../edge-functions-triggers/handle_stripe_downpayment";
+import { handleSubscription } from "../../edge-functions-triggers/handle_stripe_subscription";
 
 interface Props {
     system: FullSystemDetails;
@@ -124,9 +125,19 @@ export const UserSystemDetails = ({ system }: Props) => {
                                             InputProps={{ readOnly: true }}
                                         />
                                     </Grid>
+                                    {status === "Maintenance phase" && (
+                                        <Grid item xs={12}>
+                                            <SmartHivePrimaryBtn
+                                                text="Subscribe Yearly"
+                                                className="w-full"
+                                                onClick={() => handleSubscription(system, "yearly")}
+                                            />
+                                        </Grid>
+                                    )}
                                 </Grid>
                             </Paper>
                         </Grid>
+
 
                         {/* Monthly */}
                         <Grid item xs={12} md={4}>
@@ -149,6 +160,15 @@ export const UserSystemDetails = ({ system }: Props) => {
                                             InputProps={{ readOnly: true }}
                                         />
                                     </Grid>
+                                    {status === "Maintenance phase" && (
+                                        <Grid item xs={12}>
+                                            <SmartHivePrimaryBtn
+                                                text="Subscribe Monthly"
+                                                className="w-full"
+                                                onClick={() => handleSubscription(system, "monthly")}
+                                            />
+                                        </Grid>
+                                    )}
                                 </Grid>
                             </Paper>
                         </Grid>

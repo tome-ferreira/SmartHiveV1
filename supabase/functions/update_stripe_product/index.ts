@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
         const newStripePrice = await stripe.prices.create({
           unit_amount: price.amount,
           currency: oldPriceData.currency || "usd", // fallback to 'usd'
-          recurring: oldPriceData.recurring, // { interval: 'month' } or similar
+          recurring: { interval: oldPriceData.interval }, // { interval: 'month' } or similar
           product: productId,
         });
 
