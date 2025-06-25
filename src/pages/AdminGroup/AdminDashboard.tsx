@@ -5,18 +5,11 @@ const AdminDashboard = () => {
   const { user, signOut } = useAuth();
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Hello, you're authenticated!</h1>
-        {user ? (
-          <>
-            <p><strong>Email:</strong> {user.email}</p>
-          </>
-        ) : (
-          <p>Loading user info...</p>
-        )}
+    <>
+      <h1 className="text-2xl font-bold mb-4">Hello {user?.user_metadata.full_name || user?.email}!</h1>
 
       <SmartHivePrimaryBtn text="Log-out" onClick={signOut} />
-    </div>
+    </>
   );
 };
 
