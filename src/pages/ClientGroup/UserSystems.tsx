@@ -1,4 +1,4 @@
-import { UserSystemsGallery } from "../../components/userSystems/userSystemsGalery";
+import { UserSystemsGallery } from "../../components/userSystems/UserSystemsGalery";
 
 const UserSystemsPage = () => {
     return (
